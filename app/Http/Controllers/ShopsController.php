@@ -1,0 +1,266 @@
+<?php
+
+namespace KushyApi\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
+use KushyApi\Http\Controllers\Controller;
+use KushyApi\Http\Requests\StoreShops;
+use KushyApi\Http\Requests\UpdateShops;
+use KushyApi\Http\Resources\Shops as ShopsResource;
+use KushyApi\Http\Resources\ShopsCollection;
+use KushyApi\Inventory;
+use KushyApi\Posts;
+use KushyApi\Services\AddHoursPostMeta;
+use KushyApi\Services\AddPostCategories;
+use KushyApi\Services\AddPostMeta;
+use KushyApi\Services\CreatePostSlug;
+use KushyApi\Services\DeletePost;
+use KushyApi\Services\UploadPostMedia;
+use KushyApi\Traits\Search;
+
+class ShopsController extends Controller
+{
+
+    use Search;
+
+    public function __construct(AddPostMeta $AddPostMeta, AddPostCategories $AddPostCategories, CreatePostSlug $CreatePostSlug, UploadPostMedia $UploadPostMedia) 
+    {
+        $this->middleware('auth:api', ['except' => ['index', 'show', 'menu']]);
+        $this->AddPostMeta = $AddPostMeta;
+        $this->AddPostCategories = $AddPostCategories;
+        $this->CreatePostSlug = $CreatePostSlug;
+        $this->UploadPostMedia = $UploadPostMedia;
+    }
+
+    /**
+     * Create post meta data (emails, phone, etc)
+     *
+     * @param array $postMeta
+     * @param Posts::eloquent $shop
+     * @return void
+     */
+    public function postMeta($postMeta, $postId)
+    {
+        foreach($postMeta as $metaName => $metaValue)
+        {
+            if($metaValue)
+            {
+                $this->AddPostMeta->create($postId, $metaName, $metaValue);
+            }
+        }
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+        $config = Config::get('api');
+
+        /**
+         * We grab the model first and set the section
+         * Then we use the search method from the Search interface
+         * and pass through the request
+         * 
+         * This is a checker to see if we need to search, 
+         * and if so, it filters the model results
+         */
+        $shops = Posts::whereSection('shop');
+
+        if($request->get('search') !== '')
+        {
+            $shops = $this->search($shops, $request);
+        } else {
+            $shops->paginate($config['query']['pagination']);
+        }
+
+        return (new ShopsCollection($shops))
+            ->response()
+            ->setStatusCode(201);
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function location($lat, $lng)
+    {
+        $config = Config::get('api');
+
+        $shops = Posts::location($lat, $lng, null, 50, 3);
+
+        return new ShopsCollection($shops);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(StoreShops $request)
+    {
+        $validated = $request->validated();
+
+        // Generate a slug and hardcode the section
+        $validated['section'] = 'shop';
+        $validated['slug'] = $this->CreatePostSlug->create($request->input('name'));
+
+        // Create the post
+        $newShop = Posts::create($validated);
+
+        // Upload featured image and avatar - then attach to post
+        $this->UploadPostMedia->upload($request, $newShop, 'shops');
+
+        /**
+         * Handle the categories
+         * We check the category input, and the category sub-field
+         * Just in case someone uses `shop.category`
+         */
+        if($request->input('category'))
+        { 
+            $categories = $request->input('category');
+        } elseif($request->input('*.category')) {
+            $categories = $request->input('*.category');
+        }
+
+        if(isset($categories))
+        {
+            $this->AddPostCategories->create($categories, $newShop->id);
+        }
+
+        /**
+         * Create post meta data (emails, phone, etc)
+         */
+        if($postMeta = $request->input('meta'))
+        {
+            $this->postMeta($postMeta, $newShop->id);
+        }
+
+        // Handle the Hours of Operation
+        if($request->input('hours'))
+        {
+            $AddHoursPostMeta->create($request, $newShop->id);   
+        }
+
+
+        return (new ShopsResource($newShop))
+            ->response()
+            ->setStatusCode(201);
+
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($slug)
+    {
+        $shop = Posts::whereSlug($slug)->firstOrFail();
+
+        return new ShopsResource($shop);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     * 
+     * Post is validated using the UpdateShops class.
+     * Make sure to insert extra fields like slug and section
+     * BEFORE post is updated
+     * 
+     * After post is updated, update media and pivot tables
+     * - Featured image
+     * - Avatar
+     * - Categories
+     * - Post Meta
+     * - Hours of Operation
+     *
+     * @param  \Kushy\Http\Requests\UpdateShops  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(UpdateShops $request, AddHoursPostMeta $AddHoursPostMeta, $id)
+    {
+        $shop = Posts::find($id);
+        $validated = $request->validated();
+
+        // Generate a slug and hardcode the section
+        $validated['section'] = 'shop';
+        if($request->input('name'))
+        {
+            $validated['slug'] = $this->CreatePostSlug->create($request->input('name'));
+        }
+
+        // Update the shop with validated post fields
+        $shop->fill($validated);
+
+        // Upload featured image and avatar - then attach to post
+        $this->UploadPostMedia->upload($request, $shop, 'shops');
+
+        /**
+         * Handle the categories
+         * We check the category input, and the category sub-field
+         * Just in case someone uses `shop.category`
+         */
+        if($request->input('category'))
+        { 
+            $categories = $request->input('category');
+        } elseif($request->input('*.category')) {
+            $categories = $request->input('*.category');
+        }
+
+        if(isset($categories))
+        {
+            $this->AddPostCategories->create($categories, $shop->id);
+        }
+
+        /**
+         * Create post meta data (emails, phone, etc)
+         */
+        if($postMeta = $request->input('meta'))
+        {
+            $this->postMeta($postMeta, $shop->id);
+        }
+
+        // Handle the Hours of Operation
+        if($request->input('hours'))
+        {
+            $AddHoursPostMeta->create($request, $shop->id);   
+        }
+
+
+        return (new ShopsResource($shop))
+            ->response()
+            ->setStatusCode(200);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $deletedShop = Posts::destroy($id);
+
+        if($deletedShop)
+        {
+            return response()
+                ->json(['status' => 'Successfully deleted the shop'])
+                ->setStatusCode(200);
+        } else {
+            return response()
+                ->json(['status' => "Couldn't delete that shop"])
+                ->setStatusCode(400);
+        }
+    }
+}
