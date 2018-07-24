@@ -59,9 +59,9 @@ class Kernel extends HttpKernel
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \KushyApi\Http\Middleware\RedirectIfAuthenticated::class,
-        'admin' => \Kushy\Http\Middleware\Admin::class,
-        'business' => \Kushy\Http\Middleware\Business::class,
-        'business_token' => \Kushy\Http\Middleware\BusinessAccessToken::class,
+        'admin' => \KushyApi\Http\Middleware\Admin::class,
+        'business' => \KushyApi\Http\Middleware\Business::class,
+        'business_token' => \KushyApi\Http\Middleware\BusinessAccessToken::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     ];

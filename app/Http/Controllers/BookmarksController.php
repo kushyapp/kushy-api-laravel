@@ -3,10 +3,22 @@
 namespace KushyApi\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use KushyApi\Http\Controllers\Controller;
+use KushyApi\Http\Requests\StoreBookmarks;
+use KushyApi\Http\Resources\Bookmarks as BookmarksResource;
+use KushyApi\Http\Resources\BookmarksCollection;
+use KushyApi\Bookmarks;
 
 class BookmarksController extends Controller
 {
+
+    public function __construct() 
+    {
+        $this->middleware('auth:api', ['except' => ['index', 'show']]);
+        $this->middleware('admin', ['except' => ['index', 'show']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +26,11 @@ class BookmarksController extends Controller
      */
     public function index()
     {
-        //
+        $config = Config::get('api');
+
+        $bookmarks = Bookmarks::paginate($config['query']['pagination']);
+
+        return new BookmarksCollection($bookmarks);
     }
 
     /**
@@ -25,7 +41,11 @@ class BookmarksController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $bookmark = Bookmarks::create($request->validated());
+
+        return (new BookmarksResource($bookmark))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -36,7 +56,11 @@ class BookmarksController extends Controller
      */
     public function show($id)
     {
-        //
+        $bookmark = Bookmarks::findOrFail($id);
+
+        return (new BookmarksResource($bookmark))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -48,7 +72,14 @@ class BookmarksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // Grab the inventory item so we can update it
+        $bookmark = Bookmarks::findOrFail($id);
+
+        $bookmark->fill($request->validated());
+        
+        return (new BookmarksResource($bookmark))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -59,6 +90,11 @@ class BookmarksController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Bookmarks::destroy($id);
+
+        return response()->json([
+            'code' => true,
+            'response' => 'Successfully deleted bookmark.'
+        ]);
     }
 }

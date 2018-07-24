@@ -3,7 +3,9 @@
 namespace KushyApi\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use KushyApi\Http\Controllers\Controller;
+use KushyApi\Http\Requests\StoreInventory;
 use KushyApi\Http\Resources\Inventory as InventoryResource;
 use KushyApi\Http\Resources\InventoryCollection;
 use KushyApi\Inventory;
@@ -11,6 +13,12 @@ use KushyApi\Posts;
 
 class InventoryController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['index', 'show']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +26,12 @@ class InventoryController extends Controller
      */
     public function index()
     {
-        //
+        $config = Config::get('api');
+
+        // Grab the latest inventory
+        $inventory = Inventory::paginate($config['query']['pagination']);
+
+        return new InventoryCollection($inventory);
     }
 
     /**
@@ -27,9 +40,13 @@ class InventoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreInventory $request)
     {
-        //
+        $inventory = Inventory::create($request->validated());
+        
+        return (new InventoryResource($inventory))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -40,7 +57,7 @@ class InventoryController extends Controller
      */
     public function show(Request $request, $id)
     {
-        // Grab the shop
+        // Grab the inventory by ID
         $inventory = Inventory::find($id);
 
         return new InventoryResource($inventory);
@@ -86,9 +103,16 @@ class InventoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreInventory $request, $id)
     {
-        //
+        // Grab the inventory item so we can update it
+        $inventory = Inventory::findOrFail($id);
+
+        $inventory->fill($request->validated());
+        
+        return (new InventoryResource($inventory))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -99,6 +123,11 @@ class InventoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Inventory::destroy($id);
+
+        return response()->json([
+            'code' => true,
+            'response' => 'Successfully deleted inventory item.'
+        ]);
     }
 }

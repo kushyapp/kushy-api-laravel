@@ -8,6 +8,13 @@ use KushyApi\Categories;
 
 class CategoriesController extends Controller
 {
+
+    public function __construct() 
+    {
+        $this->middleware('auth:api', ['except' => ['index', 'show']]);
+        $this->middleware('admin', ['except' => ['index', 'show']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -34,7 +41,11 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $category = Category::create($request->all());
+
+        return response()
+            ->setStatusCode(201)
+            ->json($category);
     }
 
     /**
@@ -45,7 +56,11 @@ class CategoriesController extends Controller
      */
     public function show($id)
     {
-        
+        $categories = Categories::findOrFail($id);
+
+        return response()
+            ->json($categories)
+            ->setStatusCode(201);
     }
 
     /**
@@ -57,7 +72,14 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // Grab the inventory item so we can update it
+        $category = Categories::findOrFail($id);
+
+        $category->fill($request->all());
+        
+        return response()
+            ->setStatusCode(201)
+            ->json($category);
     }
 
     /**
@@ -68,6 +90,11 @@ class CategoriesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Categories::destroy($id);
+
+        return response()->json([
+            'code' => true,
+            'response' => 'Successfully deleted categories.'
+        ]);
     }
 }

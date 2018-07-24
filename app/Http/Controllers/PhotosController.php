@@ -4,12 +4,19 @@ namespace KushyApi\Http\Controllers;
 
 use Illuminate\Http\Request;
 use KushyApi\Http\Controllers\Controller;
+use KushyApi\Http\Requests\StorePhotos;
 use KushyApi\Http\Resources\Images as ImagesResource;
 use KushyApi\Http\Resources\ImagesCollection;
 use KushyApi\Images;
 
 class PhotosController extends Controller
 {
+    
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['index', 'show']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -30,9 +37,13 @@ class PhotosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePhotos $request)
     {
-        //
+        $image = Images::create($request->validated());
+
+        return (new ImagesResource($image))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -83,9 +94,16 @@ class PhotosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StorePhotos $request, $id)
     {
-        //
+        // Grab the inventory item so we can update it
+        $image = Images::findOrFail($id);
+
+        $image->fill($request->validated());
+        
+        return (new ImagesResource($image))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -96,6 +114,11 @@ class PhotosController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Images::destroy($id);
+
+        return response()->json([
+            'code' => true,
+            'response' => 'Successfully deleted image.'
+        ]);
     }
 }

@@ -3,13 +3,21 @@
 namespace KushyApi\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use KushyApi\Http\Controllers\Controller;
+use KushyApi\Http\Requests\StoreReviews;
 use KushyApi\Http\Resources\Reviews as ReviewsResource;
 use KushyApi\Http\Resources\ReviewsCollection;
 use KushyApi\Reviews;
 
 class ReviewsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['index', 'show']]);
+        $this->middleware('admin', ['except' => ['index', 'show']]);
+    }
+    
     /**
      * Display a paginated archive of all reviews
      *
@@ -17,7 +25,9 @@ class ReviewsController extends Controller
      */
     public function index()
     {
-        $reviews = Reviews::paginate(10);
+        $config = Config::get('api');
+
+        $reviews = Reviews::paginate($config['query']['pagination']);
 
         return new ReviewsCollection($reviews);
     }
@@ -28,9 +38,13 @@ class ReviewsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreReviews $request)
     {
-        //
+        $review = Reviews::create($request->validated());
+
+        return (new ReviewsResource($review))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -43,7 +57,9 @@ class ReviewsController extends Controller
     {
         $review = Reviews::findOrFail($id);
 
-        return new ReviewsResource($review);
+        return (new ReviewsResource($review))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -54,7 +70,9 @@ class ReviewsController extends Controller
      */
     public function post($id)
     {
-        $reviews = Reviews::with('user')->wherePostId($id)->paginate(10);
+        $config = Config::get('api');
+
+        $reviews = Reviews::with('user')->wherePostId($id)->paginate($config['query']['pagination']);
 
         return new ReviewsCollection($reviews);
     }
@@ -67,7 +85,9 @@ class ReviewsController extends Controller
      */
     public function user($id)
     {
-        $reviews = Reviews::with('post')->wherePostId($id)->paginate(10);
+        $config = Config::get('api');
+
+        $reviews = Reviews::with('post')->wherePostId($id)->paginate($config['query']['pagination']);
 
         return new ReviewsCollection($reviews);
     }
@@ -81,7 +101,14 @@ class ReviewsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // Grab the inventory item so we can update it
+        $review = Reviews::findOrFail($id);
+
+        $review->fill($request->validated());
+        
+        return (new ReviewsResource($review))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -92,6 +119,11 @@ class ReviewsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Reviews::destroy($id);
+
+        return response()->json([
+            'code' => true,
+            'response' => 'Successfully deleted review.'
+        ]);
     }
 }

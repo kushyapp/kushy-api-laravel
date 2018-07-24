@@ -24,13 +24,12 @@ class ShopsController extends Controller
 
     use Search;
 
-    public function __construct(AddPostMeta $AddPostMeta, AddPostCategories $AddPostCategories, CreatePostSlug $CreatePostSlug, UploadPostMedia $UploadPostMedia) 
+    public function __construct(AddPostMeta $AddPostMeta, AddPostCategories $AddPostCategories, CreatePostSlug $CreatePostSlug) 
     {
         $this->middleware('auth:api', ['except' => ['index', 'show', 'menu']]);
         $this->AddPostMeta = $AddPostMeta;
         $this->AddPostCategories = $AddPostCategories;
         $this->CreatePostSlug = $CreatePostSlug;
-        $this->UploadPostMedia = $UploadPostMedia;
     }
 
     /**
@@ -84,7 +83,7 @@ class ShopsController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Search for nearby shops by lat/lang
      *
      * @return \Illuminate\Http\Response
      */
@@ -95,11 +94,11 @@ class ShopsController extends Controller
         $shops = Posts::location($lat, $lng, null, 50, 3);
 
         return new ShopsCollection($shops);
-
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create a new shop (in Posts model)
+     * Add categories, post meta, and hours of operation
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -112,11 +111,8 @@ class ShopsController extends Controller
         $validated['section'] = 'shop';
         $validated['slug'] = $this->CreatePostSlug->create($request->input('name'));
 
-        // Create the post
+        // Create the post using validated data
         $newShop = Posts::create($validated);
-
-        // Upload featured image and avatar - then attach to post
-        $this->UploadPostMedia->upload($request, $newShop, 'shops');
 
         /**
          * Handle the categories
@@ -154,6 +150,24 @@ class ShopsController extends Controller
             ->response()
             ->setStatusCode(201);
 
+    }
+
+    /**
+     * Store the avatar or featured image and attach to post
+     * Goes off to a Service that accepts the request
+     *
+     * @param [uuid] $id - Post UUID
+     * @return void
+     */
+    public function storeMedia(UploadPostMedia $UploadPostMedia, $id) 
+    {
+        $shop = Posts::find($id);
+
+        $UploadPostMedia->upload($request, $shop, 'shops');
+        
+        return (new ShopsResource($shop))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -201,9 +215,6 @@ class ShopsController extends Controller
 
         // Update the shop with validated post fields
         $shop->fill($validated);
-
-        // Upload featured image and avatar - then attach to post
-        $this->UploadPostMedia->upload($request, $shop, 'shops');
 
         /**
          * Handle the categories

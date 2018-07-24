@@ -1,6 +1,18 @@
 # Kushy API Changelog
 
-## 2.7.0 (July 20, 2018)
+## 2.7.1 (July 23, 2018)
+
+### Major Changes
+
+* Added basic test for ShopsController (@todo: Missing methods in ShopControllerTest)
+* New endpoints: /inventory/, /orders/, /orders/items/, /reviews/, /activity/, /bookmarks/.
+* Finished CRUD functionality for /photos/, /categories/ endpoints.
+
+### Minor Changes
+
+* Added more `findOrFail()` to any `find()` queries in API (ensures fallback to 404)
+
+## 2.7.0 (July 23, 2018)
 
 ### Major Changes
 

@@ -3,14 +3,14 @@
 namespace KushyApi\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 use KushyApi\Http\Controllers\Controller;
-use KushyApi\Http\Requests\StoreOrders;
-use KushyApi\Http\Resources\Orders as OrdersResource;
-use KushyApi\Http\Resources\OrdersCollection;
-use KushyApi\Orders;
+use Illuminate\Support\Facades\Config;
+use KushyApi\Http\Requests\StoreOrderItems;
+use KushyApi\Http\Resources\OrderItems as OrderItemsResource;
+use KushyApi\Http\Resources\OrderItemsCollection;
+use KushyApi\OrderItems;
 
-class OrdersController extends Controller
+class OrderItemsController extends Controller
 {
 
     public function __construct()
@@ -18,7 +18,6 @@ class OrdersController extends Controller
         $this->middleware('auth:api');
         $this->middleware('business');
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -28,9 +27,9 @@ class OrdersController extends Controller
     {
         $config = Config::get('api');
 
-        $orders = Orders::paginate($config['query']['pagination']);
+        $orders = OrderItems::paginate($config['query']['pagination']);
 
-        return (new OrdersCollection($orders))
+        return (new OrderItemsCollection($orders))
             ->response()
             ->setStatusCode(201);
     }
@@ -41,11 +40,11 @@ class OrdersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreOrders $request)
+    public function store(StoreOrderItems $request)
     {
-        $order = Orders::create($request->validated());
+        $orderItem = OrderItems::create($request->validated());
 
-        return (new OrdersResource($order))
+        return (new OrdersResource($orderItem))
             ->response()
             ->setStatusCode(201);
     }
@@ -58,9 +57,9 @@ class OrdersController extends Controller
      */
     public function show($id)
     {
-        $order = Orders::findOrFail($id);
+        $orderItem = OrderItems::findOrFail($id);
 
-        return (new OrdersResource($order))
+        return (new OrdersResource($orderItem))
             ->response()
             ->setStatusCode(201);
     }
@@ -72,13 +71,13 @@ class OrdersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreOrders $request, $id)
+    public function update(Request $request, $id)
     {
-        $order = Orders::findOrFail($id);
+        $orderItem = OrderItems::findOrFail($id);
 
-        $order->fill($request->validated());
+        $orderItem->fill($request->validated());
 
-        return (new OrdersResource($order))
+        return (new OrdersResource($orderItem))
             ->response()
             ->setStatusCode(201);
     }
@@ -91,11 +90,11 @@ class OrdersController extends Controller
      */
     public function destroy($id)
     {
-        Orders::destroy($id);
+        OrderItems::destroy($id);
 
         return response()->json([
             'code' => true,
-            'response' => 'Successfully deleted order.'
+            'response' => 'Successfully deleted order item.'
         ]);
     }
 }

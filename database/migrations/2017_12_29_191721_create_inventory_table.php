@@ -28,14 +28,14 @@ class CreateInventoryTable extends Migration
 
             // PRICING
             $table->string('pricing_type')->comment('Setting to assign pricing type (e.g. gram vs per unit)');
-            $table->decimal('list_price', 10, 2);
-            $table->decimal('sale_price', 10, 2);
+            $table->decimal('list_price', 10, 2)->nullable();
+            $table->decimal('sale_price', 10, 2)->nullable();
 
             // Average Cannabinoid Percentages
             // Manually input by user to override strain info
-            $table->decimal('thc', 5, 2);
-            $table->decimal('cbd', 5, 2);
-            $table->decimal('cbn', 5, 2);
+            $table->decimal('thc', 5, 2)->nullable();
+            $table->decimal('cbd', 5, 2)->nullable();
+            $table->decimal('cbn', 5, 2)->nullable();
 
             $table->softDeletes();
             $table->timestamps();

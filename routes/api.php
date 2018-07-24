@@ -71,7 +71,8 @@ Route::get('/', 'DeveloperController@index');
 Route::prefix('v1')->group(function () {
     // Main website sections
     Route::apiResource('shops', 'ShopsController');
-    Route::get('shops/location/{lat}/{lng}', 'StatesController@location');
+    Route::get('shops/location/{lat}/{lng}', 'ShopsController@location');
+    Route::post('shops/media', 'ShopsController@storeMedia');
 
     Route::apiResource('brands', 'BrandsController');
     Route::apiResource('products', 'ProductsController');
@@ -100,6 +101,22 @@ Route::prefix('v1')->group(function () {
     // Inventory
     Route::apiResource('inventory', 'InventoryController');
     Route::get('inventory/menu/{slug}', 'InventoryController@menu');
+
+
+    // Order Items
+    Route::apiResource('orders/items', 'OrderItemsController');
+
+    // Orders
+    Route::apiResource('orders', 'OrdersController');
+
+    // User Activity
+    Route::apiResource('activity', 'ActivityController');
+
+    // Reviews
+    Route::apiResource('reviews', 'ReviewsController');
+
+    // Bookmarks
+    Route::apiResource('bookmarks', 'BookmarksController');
 
 });
 

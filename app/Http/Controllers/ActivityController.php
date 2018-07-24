@@ -3,10 +3,22 @@
 namespace KushyApi\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use KushyApi\Http\Controllers\Controller;
+use KushyApi\Http\Requests\StoreUserActivity;
+use KushyApi\Http\Resources\UserActivity as UserActivityResource;
+use KushyApi\Http\Resources\UserActivityCollection;
+use KushyApi\UserActivity;
 
 class ActivityController extends Controller
 {
+    
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['index', 'show']]);
+        $this->middleware('admin', ['except' => ['index', 'show']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +26,17 @@ class ActivityController extends Controller
      */
     public function index()
     {
-        //
+        $config = Config::get('api');
+
+        $activity = UserActivity::with('user')
+                        ->whereStatus(true)
+                        ->whereIn('section', ['bookmarks', 'reviews', 'useful'])
+                        ->where('section', '<>', 'useful')
+                        ->orderBy('id', 'desc')
+                        ->take($config['query']['pagination'])
+                        ->get();
+
+        return new UserActivityCollection($activity);
     }
 
     /**
@@ -25,7 +47,11 @@ class ActivityController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $review = UserActivity::create($request->validated());
+
+        return (new UserActivityResource($review))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -36,7 +62,11 @@ class ActivityController extends Controller
      */
     public function show($id)
     {
-        //
+        $review = UserActivity::findOrFail($id);
+
+        return (new UserActivityResource($review))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -48,7 +78,14 @@ class ActivityController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // Grab the inventory item so we can update it
+        $review = UserActivity::findOrFail($id);
+
+        $review->fill($request->validated());
+        
+        return (new UserActivityResource($review))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -59,6 +96,11 @@ class ActivityController extends Controller
      */
     public function destroy($id)
     {
-        //
+        UserActivity::destroy($id);
+
+        return response()->json([
+            'code' => true,
+            'response' => 'Successfully deleted review.'
+        ]);
     }
 }

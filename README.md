@@ -19,6 +19,12 @@ You're good to go!
 
 This project is setup to use Docker, but Laravel allows you to use various other methods to deploy a development environment. Regardless of what method you choose, you'll be required to setup an ENV file.
 
+#### Adding an Admin
+
+There's a sample User Seed that includes an admin. You can copy this format and run the seed.
+
+Or you could also register for a new user, and then alter the SQL table to modify the user's `type` to `admin`.
+
 #### PHP + SQLite
 
 1. If you're on Windows, make sure PHP is installed globally (`php -v` should work in your Command Line)

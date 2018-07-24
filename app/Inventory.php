@@ -27,6 +27,15 @@ class Inventory extends Model
     protected $table = 'inventory';
 
     /**
+     * Set default values for new inventory items
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'pricing_type' => 'gram'
+    ];
+
+    /**
      * The allowed fields insertable into the DB by forms/arrays
      *
      * @var string
