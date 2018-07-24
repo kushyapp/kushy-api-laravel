@@ -3,8 +3,9 @@
 namespace KushyApi\Http\Controllers;
 
 use Illuminate\Http\Request;
-use KushyApi\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Config;
+use Spatie\QueryBuilder\QueryBuilder;
+use KushyApi\Http\Controllers\Controller;
 use KushyApi\Http\Requests\StoreOrderItems;
 use KushyApi\Http\Resources\OrderItems as OrderItemsResource;
 use KushyApi\Http\Resources\OrderItemsCollection;
@@ -27,7 +28,22 @@ class OrderItemsController extends Controller
     {
         $config = Config::get('api');
 
-        $orders = OrderItems::paginate($config['query']['pagination']);
+        /**
+         * We use Spatie's Query Builder package to handle
+         * filtering, sorting, and includes
+         */
+
+        $orders = QueryBuilder::for(OrderItems::class)
+            ->allowedFilters([
+                'order_id',
+                'inventory_id',
+                'product_type',
+            ])
+            ->allowedIncludes([
+                'order', 
+                'inventory', 
+            ])
+            ->paginate($config['query']['pagination']);
 
         return (new OrderItemsCollection($orders))
             ->response()

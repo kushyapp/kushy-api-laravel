@@ -4,6 +4,7 @@ namespace KushyApi\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Spatie\QueryBuilder\QueryBuilder;
 use KushyApi\Http\Controllers\Controller;
 use KushyApi\Http\Requests\StoreShops;
 use KushyApi\Http\Requests\UpdateShops;
@@ -17,12 +18,9 @@ use KushyApi\Services\AddPostMeta;
 use KushyApi\Services\CreatePostSlug;
 use KushyApi\Services\DeletePost;
 use KushyApi\Services\UploadPostMedia;
-use KushyApi\Traits\Search;
 
 class ShopsController extends Controller
 {
-
-    use Search;
 
     public function __construct(AddPostMeta $AddPostMeta, AddPostCategories $AddPostCategories, CreatePostSlug $CreatePostSlug) 
     {
@@ -60,21 +58,32 @@ class ShopsController extends Controller
         $config = Config::get('api');
 
         /**
-         * We grab the model first and set the section
-         * Then we use the search method from the Search interface
-         * and pass through the request
-         * 
-         * This is a checker to see if we need to search, 
-         * and if so, it filters the model results
+         * We use Spatie's Query Builder package to handle
+         * filtering, sorting, and includes
          */
-        $shops = Posts::whereSection('shop');
 
-        if($request->get('search') !== '')
-        {
-            $shops = $this->search($shops, $request);
-        } else {
-            $shops->paginate($config['query']['pagination']);
-        }
+        $shops = QueryBuilder::for(Posts::class)
+            ->whereSection('shop')
+            ->allowedFilters([
+                'name', 
+                'slug', 
+                'rating', 
+                'featured', 
+                'state', 
+                'city',
+                'country',
+            ])
+            ->allowedIncludes([
+                'bookmarks', 
+                'categories', 
+                'meta', 
+                'brand', 
+                'children', 
+                'owners', 
+                'images', 
+                'inventory'
+            ])
+            ->paginate($config['query']['pagination']);
 
         return (new ShopsCollection($shops))
             ->response()
@@ -176,9 +185,9 @@ class ShopsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($slug)
+    public function show($id)
     {
-        $shop = Posts::whereSlug($slug)->firstOrFail();
+        $shop = Posts::find($id)->firstOrFail();
 
         return new ShopsResource($shop);
     }

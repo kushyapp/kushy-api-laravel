@@ -1,5 +1,13 @@
 # Kushy API Changelog
 
+## 2.8.0 (July 24, 2018)
+
+### Major Changes
+
+* API: Installed Spatie's Query Builder. Used to add filtering, sorting, and including relations on API endpoints (usually archives/index). Implemented on /shops/ endpoint (added to Controller and Resource Collection)
+* API: Updated Shops, Brands, Products, Strains, Reviews, Orders, Order Items, Activity, Search, Inventory index methods with Query Builder.
+* API: Search - Added new SearchController method and endpoint (`/search/posts/`). Uses Query Builder to search entire Posts class (`/search/posts/?filters[name]=Green&filters[rating]=4`).
+
 ## 2.7.1 (July 23, 2018)
 
 ### Major Changes

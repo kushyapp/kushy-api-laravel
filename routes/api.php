@@ -89,7 +89,8 @@ Route::prefix('v1')->group(function () {
     Route::get('photos/user/{id}', 'PhotosController@user');
 
 
-    Route::get('search/{field}/{search}', 'SearchController@searchByColumn');
+    Route::get('search/posts/', 'SearchController@index');
+    // Route::get('search/{field}/{search}', 'SearchController@searchByColumn');
 
     // State / City listing
     Route::get('states', 'StatesController@index');

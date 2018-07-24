@@ -4,6 +4,7 @@ namespace KushyApi\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Spatie\QueryBuilder\QueryBuilder;
 use KushyApi\Http\Controllers\Controller;
 use KushyApi\Http\Requests\StoreInventory;
 use KushyApi\Http\Resources\Inventory as InventoryResource;
@@ -28,10 +29,46 @@ class InventoryController extends Controller
     {
         $config = Config::get('api');
 
-        // Grab the latest inventory
-        $inventory = Inventory::paginate($config['query']['pagination']);
+        /**
+         * We use Spatie's Query Builder package to handle
+         * filtering, sorting, and includes
+         */
 
-        return new InventoryCollection($inventory);
+        $inventory = QueryBuilder::for(Inventory::class)
+            ->allowedFilters([
+                'product_id', 
+                'business_id', 
+                'section', 
+                'description', 
+                'list_price', 
+                'sale_price', 
+                'thc', 
+                'cbd', 
+                'cbn',
+                'status',
+                'stock',
+                'half_gram',
+                'one_gram',
+                'two_grams',
+                'eighth_ounce',
+                'quarter_ounce',
+                'half_ounce',
+                'ounce',
+                'quarter_pound',
+                'half_pound',
+                'pound'
+            ])
+            ->allowedIncludes([
+                'product', 
+                'business', 
+                'purchases', 
+                'carts'
+            ])
+            ->paginate($config['query']['pagination']);
+
+        return (new InventoryCollection($inventory))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**

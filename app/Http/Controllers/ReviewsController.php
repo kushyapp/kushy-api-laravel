@@ -4,6 +4,7 @@ namespace KushyApi\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Spatie\QueryBuilder\QueryBuilder;
 use KushyApi\Http\Controllers\Controller;
 use KushyApi\Http\Requests\StoreReviews;
 use KushyApi\Http\Resources\Reviews as ReviewsResource;
@@ -27,9 +28,28 @@ class ReviewsController extends Controller
     {
         $config = Config::get('api');
 
-        $reviews = Reviews::paginate($config['query']['pagination']);
+        /**
+         * We use Spatie's Query Builder package to handle
+         * filtering, sorting, and includes
+         */
 
-        return new ReviewsCollection($reviews);
+        $reviews = QueryBuilder::for(Reviews::class)
+            ->allowedFilters([
+                'post_id', 
+                'user_id', 
+                'rating', 
+                'review'
+            ])
+            ->allowedIncludes([
+                'user', 
+                'post', 
+                'strainMeta'
+            ])
+            ->paginate($config['query']['pagination']);
+
+        return (new ReviewsCollection($reviews))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**

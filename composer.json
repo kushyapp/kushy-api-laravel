@@ -16,8 +16,9 @@
         "laravel/passport": "^6.0",
         "laravel/socialite": "^3.0",
         "laravel/tinker": "^1.0",
-        "league/flysystem-aws-s3-v3":   "~1.0",
+        "league/flysystem-aws-s3-v3": "~1.0",
         "paragonie/random_compat": "2.*",
+        "spatie/laravel-query-builder": "^1.10",
         "torann/geoip": "^1.0"
     },
     "require-dev": {

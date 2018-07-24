@@ -4,6 +4,7 @@ namespace KushyApi\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Spatie\QueryBuilder\QueryBuilder;
 use KushyApi\Http\Controllers\Controller;
 use KushyApi\Http\Requests\StoreStrains;
 use KushyApi\Http\Requests\UpdateStrains;
@@ -56,9 +57,33 @@ class StrainsController extends Controller
     {
         $config = Config::get('api');
 
-        $strains = Posts::whereSection('strain')
-                    ->orderBy($config['query']['order']['column'], $config['query']['order']['order'])
-                    ->paginate($config['query']['pagination']);
+        /**
+         * We use Spatie's Query Builder package to handle
+         * filtering, sorting, and includes
+         */
+
+        $strains = QueryBuilder::for(Posts::class)
+            ->whereSection('strain')
+            ->allowedFilters([
+                'name', 
+                'slug', 
+                'rating', 
+                'featured', 
+                'state', 
+                'city',
+                'country',
+            ])
+            ->allowedIncludes([
+                'bookmarks', 
+                'categories', 
+                'meta', 
+                'brand', 
+                'children', 
+                'owners', 
+                'images', 
+                'inventory'
+            ])
+            ->paginate($config['query']['pagination']);
 
         return (new StrainsCollection($strains))
             ->response()

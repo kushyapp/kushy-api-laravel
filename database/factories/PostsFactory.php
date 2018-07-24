@@ -21,17 +21,17 @@ $factory->define(KushyApi\Posts::class, function (Faker $faker) {
 });
 
 $factory->state(KushyApi\Posts::class, 'shops', [
-    'section' => 'shops',
+    'section' => 'shop',
 ]);
 
 $factory->state(KushyApi\Posts::class, 'brands', [
-    'section' => 'brands',
+    'section' => 'brand',
 ]);
 
 $factory->state(KushyApi\Posts::class, 'products', [
-    'section' => 'products',
+    'section' => 'product',
 ]);
 
 $factory->state(KushyApi\Posts::class, 'strains', [
-    'section' => 'strains',
+    'section' => 'strain',
 ]);

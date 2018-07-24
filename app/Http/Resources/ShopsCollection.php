@@ -16,6 +16,7 @@ class ShopsCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->transform(function($post){
+                $relations = $post->getRelations();
                 return [
                     'id' => $post->id,
                     'name' => $post->name,
@@ -35,6 +36,7 @@ class ShopsCollection extends ResourceCollection
                         'postal_code' => $post->postal_code,
                         'country' => $post->country,
                     ],
+                    'includes' => $relations,
                 ];
             }),
             'links' => [

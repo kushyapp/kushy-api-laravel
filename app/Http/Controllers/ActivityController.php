@@ -4,6 +4,7 @@ namespace KushyApi\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Spatie\QueryBuilder\QueryBuilder;
 use KushyApi\Http\Controllers\Controller;
 use KushyApi\Http\Requests\StoreUserActivity;
 use KushyApi\Http\Resources\UserActivity as UserActivityResource;
@@ -28,13 +29,26 @@ class ActivityController extends Controller
     {
         $config = Config::get('api');
 
-        $activity = UserActivity::with('user')
-                        ->whereStatus(true)
-                        ->whereIn('section', ['bookmarks', 'reviews', 'useful'])
-                        ->where('section', '<>', 'useful')
-                        ->orderBy('id', 'desc')
-                        ->take($config['query']['pagination'])
-                        ->get();
+        /**
+         * We use Spatie's Query Builder package to handle
+         * filtering, sorting, and includes
+         */
+
+        $activity = QueryBuilder::for(UserActivity::class)
+            ->whereStatus(true)
+            ->whereIn('section', ['bookmarks', 'reviews', 'useful'])
+            ->where('section', '<>', 'useful')
+            ->allowedFilters([
+                'user_id',
+                'section',
+                'item_id'
+            ])
+            ->allowedIncludes([
+                'user', 
+                'bookmarks', 
+                'reviews', 
+            ])
+            ->paginate($config['query']['pagination']);
 
         return new UserActivityCollection($activity);
     }

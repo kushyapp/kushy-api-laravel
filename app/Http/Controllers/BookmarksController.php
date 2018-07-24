@@ -4,6 +4,7 @@ namespace KushyApi\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Spatie\QueryBuilder\QueryBuilder;
 use KushyApi\Http\Controllers\Controller;
 use KushyApi\Http\Requests\StoreBookmarks;
 use KushyApi\Http\Resources\Bookmarks as BookmarksResource;
@@ -28,9 +29,25 @@ class BookmarksController extends Controller
     {
         $config = Config::get('api');
 
-        $bookmarks = Bookmarks::paginate($config['query']['pagination']);
+        /**
+         * We use Spatie's Query Builder package to handle
+         * filtering, sorting, and includes
+         */
 
-        return new BookmarksCollection($bookmarks);
+        $bookmarks = QueryBuilder::for(Bookmarks::class)
+            ->allowedFilters([
+                'post_id',
+                'user_id'
+            ])
+            ->allowedIncludes([
+                'user', 
+                'post', 
+            ])
+            ->paginate($config['query']['pagination']);
+
+        return (new BookmarksCollection($bookmarks))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**

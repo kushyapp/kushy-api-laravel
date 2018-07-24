@@ -4,6 +4,7 @@ namespace KushyApi\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Spatie\QueryBuilder\QueryBuilder;
 use KushyApi\Http\Controllers\Controller;
 use KushyApi\Http\Requests\StoreBrands;
 use KushyApi\Http\Requests\UpdateBrands;
@@ -55,11 +56,37 @@ class BrandsController extends Controller
     {
         $config = Config::get('api');
 
-        $brands = Posts::whereSection('brand')
-                    ->orderBy($config['query']['order']['column'], $config['query']['order']['order'])
-                    ->paginate($config['query']['pagination']);
+        /**
+         * We use Spatie's Query Builder package to handle
+         * filtering, sorting, and includes
+         */
 
-        return new BrandsCollection($brands);
+        $brands = QueryBuilder::for(Posts::class)
+            ->whereSection('brand')
+            ->allowedFilters([
+                'name', 
+                'slug', 
+                'rating', 
+                'featured', 
+                'state', 
+                'city',
+                'country',
+            ])
+            ->allowedIncludes([
+                'bookmarks', 
+                'categories', 
+                'meta', 
+                'brand', 
+                'children', 
+                'owners', 
+                'images', 
+                'inventory'
+            ])
+            ->paginate($config['query']['pagination']);
+
+        return (new BrandsCollection($brands))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
