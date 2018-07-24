@@ -19,7 +19,7 @@ class Kernel extends HttpKernel
         \KushyApi\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \KushyApi\Http\Middleware\TrustProxies::class,
-
+        \Barryvdh\Cors\HandleCors::class,
     ];
 
     /**
@@ -41,7 +41,6 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:60,1',
             'bindings',
-            \Barryvdh\Cors\HandleCors::class,
         ],
     ];
 

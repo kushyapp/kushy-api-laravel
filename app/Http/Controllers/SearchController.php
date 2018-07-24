@@ -13,13 +13,9 @@ use KushyApi\Posts;
 class SearchController extends Controller
 {
 
-    public function __construct(AddPostMeta $AddPostMeta, AddPostCategories $AddPostCategories, CreatePostSlug $CreatePostSlug, UploadPostMedia $UploadPostMedia) 
+    public function __construct() 
     {
-        $this->middleware('auth:api', ['except' => ['index', 'show']]);
-        $this->AddPostMeta = $AddPostMeta;
-        $this->AddPostCategories = $AddPostCategories;
-        $this->CreatePostSlug = $CreatePostSlug;
-        $this->UploadPostMedia = $UploadPostMedia;
+        $this->middleware('auth:api', ['except' => ['index', 'searchByColumn']]);
     }
 
     public function index(Request $request)
@@ -30,19 +26,25 @@ class SearchController extends Controller
          * We use Spatie's Query Builder package to handle
          * filtering, sorting, and includes
          */
-
         $search = QueryBuilder::for(Posts::class)
-            ->with('categories')
             ->allowedFilters([
-                'post_id', 
-                'user_id', 
+                'name', 
+                'slug', 
                 'rating', 
-                'review'
+                'featured', 
+                'state', 
+                'city',
+                'country',
             ])
             ->allowedIncludes([
-                'user', 
-                'post', 
-                'strainMeta'
+                'bookmarks', 
+                'categories', 
+                'meta', 
+                'brand', 
+                'children', 
+                'owners', 
+                'images', 
+                'inventory'
             ])
             ->paginate($config['query']['pagination']);
         
