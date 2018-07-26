@@ -25,7 +25,6 @@ class Posts extends Model
         'name',
         'slug',
         'section',
-        'email',
         'featured_img',
         'avatar',
         'description',
@@ -48,7 +47,6 @@ class Posts extends Model
      * @var array
      */
     protected $hidden = [
-        'id',
         'created_at',
         'updated_at'
     ];

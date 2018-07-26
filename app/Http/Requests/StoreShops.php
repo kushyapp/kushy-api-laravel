@@ -2,9 +2,9 @@
 
 namespace KushyApi\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use KushyApi\Http\Requests\ErrorValidatorBase;
 
-class StoreShops extends FormRequest
+class StoreShops extends ErrorValidatorBase
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,12 +29,12 @@ class StoreShops extends FormRequest
             'newAvatar'     => 'nullable|image|mimes:jpeg,bmp,png|max:420',
             'category'      => 'required',
             'meta.email'    => 'email_address',
-            'latitude'      => 'integer',
-            'longitude'     => 'integer',
+            'latitude'      => 'numeric',
+            'longitude'     => 'numeric',
             'address'       => 'string|max:255',
             'city'          => 'string|max:255',
             'state'         => 'string|max:255',
-            'postal_code'   => 'integer|max:10',
+            'postal_code'   => 'string',
             'country'       => 'string|max:255',
             'featured'      => 'boolean',
             'verified'      => 'boolean',

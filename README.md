@@ -214,19 +214,43 @@ Laravel uses [PHPUnit](https://phpunit.readthedocs.io/en/7.1/) for testing. All 
 
 **Testing API**
 
+Laravel offers a JSON method inside the test class (`$this->json()`) that allows you to query the internal API with different request methods (GET, POST, DELETE, etc). The JSON method returns a response, which offers a `assertJson` method to verify JSON matches what we expect.
+
 Inside the test method/function:
 
 ```php
-$response = $this->json('POST', 'api/v1/shops', ['name' => 'Test']);
+$shop = factory(\KushyApi\Posts::class)->states('shops')->make();
+$shop = $shop->toArray();
+
+// Category is required (see StoreShops Request validator)
+$shop['category'] = 1;
+
+$response = $this->json('POST', 'api/v1/shops', $shop);
 
 $response
     ->assertStatus(201)
     ->assertJson([
         'data' => [
-            'name' => 'Test',
-            'categories' => true
+            'name' => $shop['name'],
+            'categories' => [
+                ['category_id' => $shop['category'] ]
+            ]
         ]
     ]);
+```
+
+**Creating fake data for testing**
+
+Laravel uses the Faker library inside *factories* that generate models filled with fake data (`database/factories`). You can use these factories inside tests to quickly create objects to query or use.
+
+You can chain the factory with a `states()` method that accepts comma separated strings (or an array of strings). These are defined in the factories, reference there for all the options. The chains add extra parameters/fields to the created model, like adding a section (in this case 'shops') to Posts.
+
+```php
+$shop = factory(\KushyApi\Posts::class)->states('shops')->create();
+
+
+$shop = factory(\KushyApi\Posts::class)->states('shops')->make();
+$shop = $shop->toArray();
 ```
 
 **Authenticating / Adding JWT to POST**

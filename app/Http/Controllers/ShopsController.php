@@ -187,9 +187,11 @@ class ShopsController extends Controller
      */
     public function show($id)
     {
-        $shop = Posts::find($id)->firstOrFail();
+        $shop = Posts::findOrFail($id);
 
-        return new ShopsResource($shop);
+        return (new ShopsResource($shop))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
