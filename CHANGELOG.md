@@ -1,4 +1,4 @@
-# 2.8.1 (July 25, 2018)
+# 2.8.2 (July 25, 2018)
 
 ## Major Changes
 
@@ -8,6 +8,11 @@
 
 * Added tests for `store()` and `destroy()`. Added notes to README for handling these kind of requests (POST/DELETE).
 
+# 2.8.1 (July 25, 2018)
+
+## Bug Fixes
+
+* Fixed CORS errors and search API endpoint
 
 ## Bug Fixes
 
