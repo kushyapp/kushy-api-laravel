@@ -13,7 +13,7 @@ class StoreCategories extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return $this->user()->isAdmin;
     }
 
     /**
@@ -24,7 +24,9 @@ class StoreCategories extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name'          => 'required|unique:categories|string|max:255',
+            'section'       => 'nullable|string|max:255',
+            'parent'        => 'nullable|integer|exists:categories,id,1',
         ];
     }
 }

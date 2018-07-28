@@ -69,55 +69,102 @@ Route::get('/', 'DeveloperController@index');
 */
 
 Route::prefix('v1')->group(function () {
-    // Main website sections
+    /*
+    |----------------------------------------------------------------------
+    | Search
+    |----------------------------------------------------------------------
+    */
+    Route::get('search/posts/', 'SearchController@index');
+    // Route::get('search/{field}/{search}', 'SearchController@searchByColumn');
+
+    
+    /*
+    |----------------------------------------------------------------------
+    | Website Meta
+    |----------------------------------------------------------------------
+    */
+    // State / City listing
+    Route::get('states', 'StatesController@index');
+    Route::get('states/{state}', 'StatesController@show');
+
+    // Categories
+    Route::apiResource('categories', 'CategoriesController');
+
+
+    /*
+    |----------------------------------------------------------------------
+    | Main website sections
+    |----------------------------------------------------------------------
+    */
+
+    // Brands
+    Route::apiResource('brands', 'BrandsController');
+
+    // Products
+    Route::apiResource('products', 'ProductsController');
+
+    // Shops
     Route::apiResource('shops', 'ShopsController');
     Route::get('shops/location/{lat}/{lng}', 'ShopsController@location');
     Route::post('shops/media', 'ShopsController@storeMedia');
 
-    Route::apiResource('brands', 'BrandsController');
-    Route::apiResource('products', 'ProductsController');
+    // Strains
     Route::apiResource('strains', 'StrainsController');
 
-    // Reviews
-    Route::apiResource('reviews', 'ReviewsController');
-    Route::get('reviews/post/{id}', 'ReviewsController@post');
-    Route::get('reviews/user/{id}', 'ReviewsController@user');
+    /*
+    |----------------------------------------------------------------------
+    | Sub-sections for main section
+    | (e.g. shop reviews)
+    |----------------------------------------------------------------------
+    */
+
+    // Bookmarks
+    Route::apiResource('bookmarks', 'BookmarksController');
+    
+    // Deals
+    Route::apiResource('deals', 'DealsController');
 
     // Photos
     Route::apiResource('photos', 'PhotosController');
     Route::get('photos/post/{id}', 'PhotosController@post');
     Route::get('photos/user/{id}', 'PhotosController@user');
 
+    // Reviews
+    Route::apiResource('reviews', 'ReviewsController');
+    Route::get('reviews/post/{id}', 'ReviewsController@post');
+    Route::get('reviews/user/{id}', 'ReviewsController@user');
 
-    Route::get('search/posts/', 'SearchController@index');
-    // Route::get('search/{field}/{search}', 'SearchController@searchByColumn');
-
-    // State / City listing
-    Route::get('states', 'StatesController@index');
-    Route::get('states/{state}', 'StatesController@show');
-
-    // Categories
-    Route::get('categories', 'CategoriesController@index');
-
+    /*
+    |----------------------------------------------------------------------
+    | Business
+    |----------------------------------------------------------------------
+    */
     // Inventory
     Route::apiResource('inventory', 'InventoryController');
     Route::get('inventory/menu/{slug}', 'InventoryController@menu');
 
+    /*
+    |----------------------------------------------------------------------
+    | E-Commerce
+    |----------------------------------------------------------------------
+    */
+    // Orders
+    Route::apiResource('carts', 'CartsController');
+    
+    // Orders
+    Route::apiResource('orders', 'OrdersController');
 
     // Order Items
     Route::apiResource('orders/items', 'OrderItemsController');
 
-    // Orders
-    Route::apiResource('orders', 'OrdersController');
 
+    /*
+    |----------------------------------------------------------------------
+    | Users
+    |----------------------------------------------------------------------
+    */
     // User Activity
     Route::apiResource('activity', 'ActivityController');
-
-    // Reviews
-    Route::apiResource('reviews', 'ReviewsController');
-
-    // Bookmarks
-    Route::apiResource('bookmarks', 'BookmarksController');
 
 });
 

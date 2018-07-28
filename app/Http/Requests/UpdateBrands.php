@@ -2,9 +2,9 @@
 
 namespace KushyApi\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use KushyApi\Http\Requests\ErrorValidatorBase;
 
-class UpdateBrands extends FormRequest
+class UpdateBrands extends ErrorValidatorBase
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -35,8 +35,6 @@ class UpdateBrands extends FormRequest
             'state'         => 'string|max:255',
             'postal_code'   => 'integer|max:10',
             'country'       => 'string|max:255',
-            'featured'      => 'boolean',
-            'verified'      => 'boolean',
         ];
     }
 }

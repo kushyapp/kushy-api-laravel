@@ -2,9 +2,9 @@
 
 namespace KushyApi\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use KushyApi\Http\Requests\ErrorValidatorBase;
 
-class UpdateProducts extends FormRequest
+class UpdateProducts extends ErrorValidatorBase
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,8 +27,6 @@ class UpdateProducts extends FormRequest
             'name'          => 'string|max:255',
             'newFeatured'   => 'nullable|image|mimes:jpeg,bmp,png|max:420',
             'newAvatar'     => 'nullable|image|mimes:jpeg,bmp,png|max:420',
-            'featured'      => 'boolean',
-            'verified'      => 'boolean',
         ];
     }
 }

@@ -267,6 +267,10 @@ use Tests\Traits\AttachJwtToken;
 
 > Any tests involving SQL must be run through Docker, since the SQL DB is hoisted inside the container (and you're running from outside).
 
+**Testing Tips**
+
+* Always chain a unique() to fields like user_id when creating factories: `'username' => $faker->unique()->userName,`
+
 
 #### Authentication / Middleware
 

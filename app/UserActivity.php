@@ -33,6 +33,17 @@ class UserActivity extends Model
     ];
 
     /**
+     * Validation rules
+     *
+     * @var array
+     */
+    protected $rules = [
+        'user_id'          => 'string|required',
+        'section'          => 'string|required',
+        'item_id'          => 'string|required',
+    ];
+
+    /**
      * Get the user that owns the review.
      */
     public function user()

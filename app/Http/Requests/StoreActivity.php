@@ -2,9 +2,9 @@
 
 namespace KushyApi\Http\Requests;
 
-use KushyApi\Http\Requests\ErrorValidatorBase;
+use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateStrains extends ErrorValidatorBase
+class StoreActivity extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class UpdateStrains extends ErrorValidatorBase
      */
     public function authorize()
     {
-        return $this->user()->isAdmin;
+        return $this->user();
     }
 
     /**
@@ -24,9 +24,8 @@ class UpdateStrains extends ErrorValidatorBase
     public function rules()
     {
         return [
-            'name'          => 'string|max:255',
-            'newFeatured'   => 'nullable|image|mimes:jpeg,bmp,png|max:420',
-            'newAvatar'     => 'nullable|image|mimes:jpeg,bmp,png|max:420',
+            'section'          => 'string|required',
+            'item_id'          => 'string|required',
         ];
     }
 }

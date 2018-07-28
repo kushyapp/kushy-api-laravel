@@ -36,8 +36,6 @@ class StoreShops extends ErrorValidatorBase
             'state'         => 'string|max:255',
             'postal_code'   => 'string',
             'country'       => 'string|max:255',
-            'featured'      => 'boolean',
-            'verified'      => 'boolean',
         ];
     }
 }

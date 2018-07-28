@@ -3,18 +3,12 @@
 namespace KushyApi\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 use Spatie\QueryBuilder\QueryBuilder;
 use KushyApi\Http\Controllers\Controller;
-use KushyApi\Http\Requests\StoreActivity;
-use KushyApi\Http\Resources\UserActivity as UserActivityResource;
-use KushyApi\Http\Resources\UserActivityCollection;
-use KushyApi\UserActivity;
 
-class ActivityController extends Controller
+abstract class ApiController extends Controller
 {
-    
-    public function __construct()
+    public function __construct() 
     {
         $this->middleware('auth:api', ['except' => ['index', 'show']]);
         $this->middleware('admin', ['except' => ['index', 'show']]);
@@ -25,31 +19,18 @@ class ActivityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $config = Config::get('api');
-
         /**
          * We use Spatie's Query Builder package to handle
          * filtering, sorting, and includes
          */
-        $activity = QueryBuilder::for(UserActivity::class)
-            ->whereStatus(true)
-            ->whereIn('section', ['bookmarks', 'reviews', 'useful'])
-            ->where('section', '<>', 'useful')
-            ->allowedFilters([
-                'user_id',
-                'section',
-                'item_id'
-            ])
-            ->allowedIncludes([
-                'user', 
-                'bookmarks', 
-                'reviews', 
-            ])
-            ->paginate($config['query']['pagination']);
+        $categories = QueryBuilder::for($this->model)
+            ->allowedFilters($this->filters)
+            ->allowedIncludes($this->includes)
+            ->get();
 
-        return (new UserActivityCollection($activity))
+        return (new $this->resourceCollection($categories))
             ->response()
             ->setStatusCode(201);
     }
@@ -60,11 +41,11 @@ class ActivityController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreActivity $request)
+    public function store(Request $request)
     {
-        $review = UserActivity::create($request->validated());
+        $category = $this->model::create($request->all());
 
-        return (new UserActivityResource($review))
+        return (new $this->resource($category))
             ->response()
             ->setStatusCode(201);
     }
@@ -77,9 +58,9 @@ class ActivityController extends Controller
      */
     public function show($id)
     {
-        $review = UserActivity::findOrFail($id);
+        $categories = $this->model::findOrFail($id);
 
-        return (new UserActivityResource($review))
+        return (new $this->resource($categories))
             ->response()
             ->setStatusCode(201);
     }
@@ -94,11 +75,11 @@ class ActivityController extends Controller
     public function update(Request $request, $id)
     {
         // Grab the inventory item so we can update it
-        $review = UserActivity::findOrFail($id);
+        $category = $this->model::findOrFail($id);
 
-        $review->fill($request->validated());
+        $category->fill($request->all());
         
-        return (new UserActivityResource($review))
+        return (new $this->resource($category))
             ->response()
             ->setStatusCode(201);
     }
@@ -111,11 +92,11 @@ class ActivityController extends Controller
      */
     public function destroy($id)
     {
-        UserActivity::destroy($id);
+        $this->model::destroy($id);
 
         return response()->json([
             'code' => true,
-            'status' => 'Successfully deleted the activity.'
+            'response' => "Successfully deleted the {$this->section}."
         ]);
     }
 }

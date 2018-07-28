@@ -108,7 +108,7 @@ class StrainsController extends Controller
         $newStrain = Posts::create($validated);
 
         // Upload featured image and avatar - then attach to post
-        $this->UploadPostMedia->upload($request, $brand, 'brands');
+        $this->UploadPostMedia->upload($request, $newStrain, 'strains');
 
         /**
          * Handle the categories
@@ -151,7 +151,9 @@ class StrainsController extends Controller
     {
         $strain = Posts::find($id);
 
-        return new StrainsResource($strain);
+        return (new StrainsResource($strain))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -177,7 +179,7 @@ class StrainsController extends Controller
         $strain->fill($validated);
 
         // Upload featured image and avatar - then attach to post
-        $this->UploadPostMedia->upload($request, $brand, 'brands');
+        $this->UploadPostMedia->upload($request, $strain, 'strains');
 
         /**
          * Handle the categories

@@ -1,3 +1,20 @@
+# 2.8.3 (July 27, 2018)
+
+## Major Changes
+
+* Add new base API controller for handling base API methods (index/store/etc) + authorization middleware. Since most endpoints were copy/pasta anyway, this minimizes the modification later.
+* New route: Deals
+* Extended most request validations with error validation base class
+
+## Minor Changes
+
+* Created bookmarks factory
+* Added validation rules to UserActivity model 
+
+## Bug Fixes
+
+* Categories model now has indicator for no timestamps. Caused issue when creating new categories.
+
 # 2.8.2 (July 25, 2018)
 
 ## Major Changes

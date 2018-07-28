@@ -13,12 +13,10 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(KushyApi\User::class, function (Faker $faker) {
+$factory->define(KushyApi\Bookmarks::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
-        'username' => $faker->unique()->userName,
-        'email' => $faker->unique()->safeEmail,
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-        'remember_token' => str_random(10),
+        'id' => $faker->uuid,
+        'user_id' => factory(KushyApi\User::class)->create()->id,
+        'post_id' => factory(KushyApi\Posts::class)->states('shops')->create()->id,
     ];
 });

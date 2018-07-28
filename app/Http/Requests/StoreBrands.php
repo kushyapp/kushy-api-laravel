@@ -36,8 +36,6 @@ class StoreBrands extends FormRequest
             'state'         => 'string|max:255',
             'postal_code'   => 'integer|max:10',
             'country'       => 'string|max:255',
-            'featured'      => 'boolean',
-            'verified'      => 'boolean',
         ];
     }
 }

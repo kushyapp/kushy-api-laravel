@@ -68,9 +68,9 @@ class ShopsControllerTest extends TestCase
      */
     public function testShopsStore()
     {
-        $shop = factory(\KushyApi\Posts::class)->states('shops')->make();
+        $shop = $this->createShop();
         $shop = $shop->toArray();
-
+        echo $shop['name'];
         // Category is required (see StoreShops Request validator)
         $shop['category'] = 1;
 

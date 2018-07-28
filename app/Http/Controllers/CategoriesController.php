@@ -3,7 +3,11 @@
 namespace KushyApi\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 use KushyApi\Http\Controllers\Controller;
+use KushyApi\Http\Requests\StoreCategories;
+use KushyApi\Http\Resources\Categories as CategoriesResource;
+use KushyApi\Http\Resources\CategoriesCollection;
 use KushyApi\Categories;
 
 class CategoriesController extends Controller
@@ -22,15 +26,25 @@ class CategoriesController extends Controller
      */
     public function index(Request $request)
     {
-        if($section = $request->get('section'))
-        {
-            $categories = Categories::whereSection($section)->get();
-        } else {
-            $categories = Categories::all();
-        }
+        /**
+         * We use Spatie's Query Builder package to handle
+         * filtering, sorting, and includes
+         */
+        $categories = QueryBuilder::for(Categories::class)
+            ->allowedFilters([
+                'name',
+                'slug',
+                'section'
+            ])
+            ->allowedIncludes([
+                'relationships', 
+                'parents', 
+            ])
+            ->get();
 
-            return response()
-                ->json($categories);
+        return (new CategoriesCollection($categories))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -39,13 +53,13 @@ class CategoriesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCategories $request)
     {
-        $category = Category::create($request->all());
+        $category = Categories::create($request->all());
 
-        return response()
-            ->setStatusCode(201)
-            ->json($category);
+        return (new CategoriesResource($category))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -58,8 +72,8 @@ class CategoriesController extends Controller
     {
         $categories = Categories::findOrFail($id);
 
-        return response()
-            ->json($categories)
+        return (new CategoriesResource($categories))
+            ->response()
             ->setStatusCode(201);
     }
 
@@ -70,16 +84,16 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreCategories $request, $id)
     {
         // Grab the inventory item so we can update it
         $category = Categories::findOrFail($id);
 
         $category->fill($request->all());
         
-        return response()
-            ->setStatusCode(201)
-            ->json($category);
+        return (new CategoriesResource($category))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -94,7 +108,7 @@ class CategoriesController extends Controller
 
         return response()->json([
             'code' => true,
-            'response' => 'Successfully deleted categories.'
+            'response' => 'Successfully deleted the category.'
         ]);
     }
 }

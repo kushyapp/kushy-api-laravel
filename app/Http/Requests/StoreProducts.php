@@ -2,9 +2,9 @@
 
 namespace KushyApi\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use KushyApi\Http\Requests\ErrorValidatorBase;
 
-class StoreProducts extends FormRequest
+class StoreProducts extends ErrorValidatorBase
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class StoreProducts extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->isAdmin;
+        return $this->user()->isBusiness;
     }
 
     /**
@@ -28,8 +28,6 @@ class StoreProducts extends FormRequest
             'newFeatured'   => 'nullable|image|mimes:jpeg,bmp,png|max:420',
             'newAvatar'     => 'nullable|image|mimes:jpeg,bmp,png|max:420',
             'category'      => 'required',
-            'featured'      => 'boolean',
-            'verified'      => 'boolean',
         ];
     }
 }

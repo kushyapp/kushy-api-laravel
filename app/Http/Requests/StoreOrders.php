@@ -2,9 +2,9 @@
 
 namespace KushyApi\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use KushyApi\Http\Requests\ErrorValidatorBase;
 
-class StoreOrders extends FormRequest
+class StoreOrders extends ErrorValidatorBase
 {
     /**
      * Determine if the user is authorized to make this request.
