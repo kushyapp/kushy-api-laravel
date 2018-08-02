@@ -9,6 +9,7 @@ use Faker\Generator as Faker;
 
 $factory->define(KushyApi\UserActivity::class, function (Faker $faker) {
     $userId = factory(KushyApi\User::class)->create()->id;
+    echo $userId;
     return [
         'id' => $faker->uuid,
         'user_id' => $userId,

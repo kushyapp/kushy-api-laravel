@@ -66,7 +66,6 @@ class ActivityControllerTest extends TestCase
     {
         $activity = $this->createActivity();
         $activity = $activity->toArray();
-        echo $activity['user_id'];
 
         $response = $this->json('POST', "api/v1/activity/", $activity);
         (\KushyApi\UserActivity::class)::destroy($activity['id']);

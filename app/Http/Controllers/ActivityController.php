@@ -62,7 +62,10 @@ class ActivityController extends Controller
      */
     public function store(StoreActivity $request)
     {
-        $review = UserActivity::create($request->validated());
+        $validated = $request->validated();
+        $validated['user_id'] = $request->user()->id;
+
+        $review = UserActivity::create($validated);
 
         return (new UserActivityResource($review))
             ->response()

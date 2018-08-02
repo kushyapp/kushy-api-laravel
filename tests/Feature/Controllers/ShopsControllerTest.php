@@ -70,7 +70,7 @@ class ShopsControllerTest extends TestCase
     {
         $shop = $this->createShop();
         $shop = $shop->toArray();
-        echo $shop['name'];
+        
         // Category is required (see StoreShops Request validator)
         $shop['category'] = 1;
 

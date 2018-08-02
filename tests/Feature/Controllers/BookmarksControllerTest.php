@@ -28,7 +28,7 @@ class BookmarksControllerTest extends CrudTest
      *
      * @var string
      */
-    protected $states = 'bookmarks';
+    protected $states = '';
 
     /**
      * Extra data to pass to POST endpoint 
@@ -39,6 +39,5 @@ class BookmarksControllerTest extends CrudTest
      * @var array
      */
     protected $store = [
-        'category' => '1'
     ];
 }
