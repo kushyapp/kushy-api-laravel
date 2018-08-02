@@ -3,115 +3,59 @@
 namespace KushyApi\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
-use Spatie\QueryBuilder\QueryBuilder;
-use KushyApi\Http\Controllers\Controller;
+use KushyApi\Http\Controllers\ApiController;
 use KushyApi\Http\Requests\StoreBookmarks;
 use KushyApi\Http\Resources\Bookmarks as BookmarksResource;
 use KushyApi\Http\Resources\BookmarksCollection;
 use KushyApi\Bookmarks;
 
-class BookmarksController extends Controller
+class BookmarksController extends ApiController
 {
-
-    public function __construct() 
-    {
-        $this->middleware('auth:api', ['except' => ['index', 'show']]);
-        $this->middleware('admin', ['except' => ['index', 'show']]);
-    }
+    /**
+     * Section name to be displayed when deleting items
+     *
+     * @var string
+     */
+    protected $section = 'cart';
 
     /**
-     * Display a listing of the resource.
+     * The model to use when querying/deleting
      *
-     * @return \Illuminate\Http\Response
+     * @var [type]
      */
-    public function index()
-    {
-        $config = Config::get('api');
-
-        /**
-         * We use Spatie's Query Builder package to handle
-         * filtering, sorting, and includes
-         */
-
-        $bookmarks = QueryBuilder::for(Bookmarks::class)
-            ->allowedFilters([
-                'post_id',
-                'user_id'
-            ])
-            ->allowedIncludes([
-                'user', 
-                'post', 
-            ])
-            ->paginate($config['query']['pagination']);
-
-        return (new BookmarksCollection($bookmarks))
-            ->response()
-            ->setStatusCode(201);
-    }
+    protected $model = Bookmarks::class;
 
     /**
-     * Store a newly created resource in storage.
+     * Relationships to allow users to include in queries
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @var array
      */
-    public function store(Request $request)
-    {
-        $bookmark = Bookmarks::create($request->validated());
-
-        return (new BookmarksResource($bookmark))
-            ->response()
-            ->setStatusCode(201);
-    }
+    protected $includes = [
+        'user', 
+        'post', 
+    ];
 
     /**
-     * Display the specified resource.
+     * Allowed filters for users 
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @var array
      */
-    public function show($id)
-    {
-        $bookmark = Bookmarks::findOrFail($id);
-
-        return (new BookmarksResource($bookmark))
-            ->response()
-            ->setStatusCode(201);
-    }
+    protected $filters = [
+        'post_id',
+        'user_id'
+    ];
 
     /**
-     * Update the specified resource in storage.
+     * API Resource collection
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @var [type]
      */
-    public function update(Request $request, $id)
-    {
-        // Grab the inventory item so we can update it
-        $bookmark = Bookmarks::findOrFail($id);
-
-        $bookmark->fill($request->validated());
-        
-        return (new BookmarksResource($bookmark))
-            ->response()
-            ->setStatusCode(201);
-    }
-
+    protected $resourceCollection = BookmarksCollection::class;
+    
     /**
-     * Remove the specified resource from storage.
+     * API Resource
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @var [type]
      */
-    public function destroy($id)
-    {
-        Bookmarks::destroy($id);
-
-        return response()->json([
-            'code' => true,
-            'response' => 'Successfully deleted bookmark.'
-        ]);
-    }
+    protected $resource = BookmarksResource::class;
 }

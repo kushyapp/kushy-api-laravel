@@ -1,3 +1,9 @@
+# 2.8.4 (August 1, 2018)
+
+## Minor Changes
+
+* New Artisan Command: `php artisan api:test OptionalFolder/YourTestName Model endpoint --crud` -- Creates a test based off `tests/Templates/CrudExampleTest.php` and inserts the values from the command.
+
 # 2.8.3 (July 27, 2018)
 
 ## Major Changes
