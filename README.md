@@ -267,6 +267,12 @@ use Tests\Traits\AttachJwtToken;
 
 > Any tests involving SQL must be run through Docker, since the SQL DB is hoisted inside the container (and you're running from outside).
 
+**Running a single test**
+
+`docker-compose exec workspace ./vendor/bin/phpunit --filter ShippingManifestosControllerTest`
+
+> Great for isolating a certain test, particularly when it extends a common base controller and you need to debug it.
+
 **Testing Tips**
 
 * Always chain a unique() to fields like user_id when creating factories: `'username' => $faker->unique()->userName,`

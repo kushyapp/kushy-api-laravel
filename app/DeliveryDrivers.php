@@ -25,7 +25,6 @@ class DeliveryDrivers extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id',
         'name',
         'drivers_license',
         'license_state',

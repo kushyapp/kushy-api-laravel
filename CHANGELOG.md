@@ -1,3 +1,11 @@
+# 2.8.4 (August 2, 2018)
+
+## Major Changes
+
+* Added Shipping Manifest API resources, controller, factory, and test (passing ✅).
+* FACTORY: Added Delivery drivers factory (for use in manifesto)
+* SEEDS: Delivery driver seed adds 10 new drivers using new factory
+
 # 2.8.4 (August 1, 2018)
 
 ## Minor Changes

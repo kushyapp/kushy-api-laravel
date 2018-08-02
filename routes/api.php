@@ -142,6 +142,8 @@ Route::prefix('v1')->group(function () {
     // Inventory
     Route::apiResource('inventory', 'InventoryController');
     Route::get('inventory/menu/{slug}', 'InventoryController@menu');
+    
+    Route::apiResource('manifestos', 'ShippingManifestosController');
 
     /*
     |----------------------------------------------------------------------
