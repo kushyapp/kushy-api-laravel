@@ -21,10 +21,10 @@ class UsersPermissions extends Model
 
     protected $fillable = [
         'business_id',
-        'section',
         'user_id',
-        'claimed',
+        'verified',
         'user_type',
+        'permissions',
     ];
 
     protected $business;
