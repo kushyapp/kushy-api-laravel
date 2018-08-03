@@ -13,6 +13,7 @@ class ImagesTableSeeder extends Seeder
     public function run()
     {
         
+        $user = \KushyApi\User::whereEmail('contact@kushy.net')->first()->id;
 
         \DB::table('images')->delete();
         
@@ -23,7 +24,7 @@ class ImagesTableSeeder extends Seeder
                 'image' => 'uploads/business/photos/chronic-pain-relief-center/YGWpFK7omBCMXwUwfXeHK06kxIcPasP8qyGZwbq4.jpeg',
                 'driver' => 's3',
                 'caption' => 'Lots of delicious medicated drinks available',
-                'user_id' => '9892f997-679f-404f-8856-a4a54de131e0',
+                'user_id' => $user,
                 'post_id' => 'b5c9eba0-5cb4-11e8-a29a-cf7a68a1ae49',
                 'featured' => 0,
                 'deleted_at' => NULL,
@@ -37,7 +38,7 @@ class ImagesTableSeeder extends Seeder
                 'image' => 'uploads/business/photos/chronic-pain-relief-center/6RWUhiQPFHz0cn4I4BnkNiGYI6vamR7J71C4Hf5i.jpeg',
                 'driver' => 's3',
                 'caption' => 'Our selection of flowers',
-                'user_id' => '9892f997-679f-404f-8856-a4a54de131e0',
+                'user_id' => $user,
                 'post_id' => 'b5c9eba0-5cb4-11e8-a29a-cf7a68a1ae49',
                 'featured' => 0,
                 'deleted_at' => NULL,
@@ -51,7 +52,7 @@ class ImagesTableSeeder extends Seeder
                 'image' => 'uploads/business/photos/chronic-pain-relief-center/9fE3fdHU4f1h2rUHcTXBzWKMVsFZI41qeXV23A8n.jpeg',
                 'driver' => 's3',
                 'caption' => 'Clones of quality plants',
-                'user_id' => '9892f997-679f-404f-8856-a4a54de131e0',
+                'user_id' => $user,
                 'post_id' => 'b5c9eba0-5cb4-11e8-a29a-cf7a68a1ae49',
                 'featured' => 0,
                 'deleted_at' => NULL,
@@ -65,7 +66,7 @@ class ImagesTableSeeder extends Seeder
                 'image' => 'uploads/business/photos/chronic-pain-relief-center/wnGarhJCznXTbKrOTynVCdLCWl3qaF6T0ha1TMjJ.jpeg',
                 'driver' => 's3',
                 'caption' => 'Frosty nugs of our house specialty Chronic OG',
-                'user_id' => '9892f997-679f-404f-8856-a4a54de131e0',
+                'user_id' => $user,
                 'post_id' => 'b5c9eba0-5cb4-11e8-a29a-cf7a68a1ae49',
                 'featured' => 0,
                 'deleted_at' => NULL,
@@ -79,7 +80,7 @@ class ImagesTableSeeder extends Seeder
                 'image' => 'uploads/business/photos/chronic-pain-relief-center/Y9fFYkjsHSKMBjQ0zcuR5KHYUL6meDm3v40KX9Gc.jpeg',
                 'driver' => 's3',
                 'caption' => 'A nug of Church OG',
-                'user_id' => '9892f997-679f-404f-8856-a4a54de131e0',
+                'user_id' => $user,
                 'post_id' => 'b5c9eba0-5cb4-11e8-a29a-cf7a68a1ae49',
                 'featured' => 0,
                 'deleted_at' => NULL,
@@ -93,7 +94,7 @@ class ImagesTableSeeder extends Seeder
                 'image' => 'uploads/business/photos/chronic-pain-relief-center/6LaHcS3jZtt7VaW0LxiwhUclS3km8Ae9SLhP9oNH.jpeg',
                 'driver' => 's3',
                 'caption' => 'Caked nugs of Diamond OG',
-                'user_id' => '9892f997-679f-404f-8856-a4a54de131e0',
+                'user_id' => $user,
                 'post_id' => 'b5c9eba0-5cb4-11e8-a29a-cf7a68a1ae49',
                 'featured' => 0,
                 'deleted_at' => NULL,
@@ -107,7 +108,7 @@ class ImagesTableSeeder extends Seeder
                 'image' => 'uploads/business/photos/chronic-pain-relief-center/B9WBV4amIfbIPG8LtrvVgWbnhFDfN8Yb4vKKoaZC.jpeg',
                 'driver' => 's3',
                 'caption' => 'La Pluma Rosa Cannagars',
-                'user_id' => '9892f997-679f-404f-8856-a4a54de131e0',
+                'user_id' => $user,
                 'post_id' => 'b5c9eba0-5cb4-11e8-a29a-cf7a68a1ae49',
                 'featured' => 0,
                 'deleted_at' => NULL,
@@ -121,7 +122,7 @@ class ImagesTableSeeder extends Seeder
                 'image' => 'uploads/business/photos/chronic-pain-relief-center/hUGhieFQGcrdZI1744k3qLWRe2OS5xL0pKmUMtzk.jpeg',
                 'driver' => 's3',
                 'caption' => 'Lemon Haze',
-                'user_id' => '9892f997-679f-404f-8856-a4a54de131e0',
+                'user_id' => $user,
                 'post_id' => 'b5c9eba0-5cb4-11e8-a29a-cf7a68a1ae49',
                 'featured' => 0,
                 'deleted_at' => NULL,
