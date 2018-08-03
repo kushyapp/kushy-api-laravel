@@ -16,31 +16,38 @@ class CategoriesTableSeeder extends Seeder
             // Shops
             [
                 'name' => "Medical Marijuana Dispensary",
-                'slug' => "medical-marijuana-dispensary"
+                'slug' => "medical-marijuana-dispensary",
+                'section' => 'shop'
             ],
             [
                 'name' => "Medical Marijuana Delivery",
-                'slug' => "medical-marijuana-delivery"
+                'slug' => "medical-marijuana-delivery",
+                'section' => 'shop'
             ],
             [
                 'name' => "Recreational Shop",
-                'slug' => "recreational-shop"
+                'slug' => "recreational-shop",
+                'section' => 'shop'
             ],
             [
                 'name' => "Recreational Delivery",
-                'slug' => "recreational-delivery"
+                'slug' => "recreational-delivery",
+                'section' => 'shop'
             ],
             [
                 'name' => "Headshop",
-                'slug' => "headshop"
+                'slug' => "headshop",
+                'section' => 'shop'
             ],
             [
                 'name' => "Doctor",
-                'slug' => "doctor"
+                'slug' => "doctor",
+                'section' => 'shop'
             ],
             [
                 'name' => "Glass Gallery",
-                'slug' => "glass-gallery"
+                'slug' => "glass-gallery",
+                'section' => 'shop'
             ],
             // Brands & Products
             [
