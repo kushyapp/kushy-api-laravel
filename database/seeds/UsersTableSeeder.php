@@ -14,7 +14,6 @@ class UsersTableSeeder extends Seeder
     {
        
         User::create([
-            'id' => "9892f997-679f-404f-8856-a4a54de131e0",
             'name' => "Kushy",
             'username' => "kushy",
             'email' => "contact@kushy.net",
