@@ -37,4 +37,20 @@ class ShippingItems extends Model
         'rejected',
         'description',
     ];
+
+    /**
+     * Get the item's associated product
+     */
+    public function product()
+    {
+        return $this->belongsTo('KushyApi\Posts', 'product_id', 'id');
+    }
+    
+    /**
+     * Get the item's associated manifesto
+     */
+    public function manifesto()
+    {
+        return $this->belongsTo('KushyApi\ShippingManifesto', 'manifesto_id', 'id');
+    }
 }
