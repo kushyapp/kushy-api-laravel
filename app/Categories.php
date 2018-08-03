@@ -62,7 +62,7 @@ class Categories extends Model
      */
     public function relationships()
     {
-        return $this->hasMany('KushyApi\PostsCategories', 'id', 'category_id');
+        return $this->hasMany('KushyApi\PostsCategories', 'category_id', 'id');
     }
     
     /**
