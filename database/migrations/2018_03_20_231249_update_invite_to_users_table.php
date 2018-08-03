@@ -25,7 +25,7 @@ class UpdateInviteToUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('user_activity', function($table) {
+        Schema::table('users', function($table) {
             $table->dropColumn('invite');
         });
     }

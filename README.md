@@ -253,6 +253,13 @@ $shop = factory(\KushyApi\Posts::class)->states('shops')->make();
 $shop = $shop->toArray();
 ```
 
+**Create basic CRUD test**
+
+This command creates a controller template that extends the `CrudTest`, which tests index/store/delete/update methods on API controllers.
+
+`php artisan api:test Controllers/ShippingManifestosControllerTest ShippingManifesto manifestos --crud`
+
+
 **Authenticating / Adding JWT to POST**
 
 Add the `AttachJwtToken` to the test.

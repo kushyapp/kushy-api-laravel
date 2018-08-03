@@ -1,8 +1,16 @@
+# 2.8.5 (August 3, 2018)
+
+## New endpoint
+
+* `/shops/category/{category}` - Queries for posts by category. @todo: Maybe refactor into model scope.
+
 # 2.8.4 (August 2, 2018)
 
 ## Major Changes
 
 * Added Shipping Manifest API resources, controller, factory, and test (passing ✅).
+* Added Shipping Items API resources, controller, factory, and test (passing ✅).
+* Added User Permissions (aka claiming businesses) API resources, controller, factory, and test (passing ✅).
 * FACTORY: Added Delivery drivers factory (for use in manifesto)
 * SEEDS: Delivery driver seed adds 10 new drivers using new factory
 
