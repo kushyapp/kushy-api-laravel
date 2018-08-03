@@ -21,7 +21,6 @@ class ShopsCollection extends ResourceCollection
                     'id' => $post->id,
                     'name' => $post->name,
                     'slug' => $post->slug,
-                    'categories' => $post->categories,
                     'avatar' => $post->getAvatar,
                     'featured_img' => $post->getFeaturedImage,
                     'rating' => $post->rating,

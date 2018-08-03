@@ -10,6 +10,7 @@ use KushyApi\Http\Requests\StoreShops;
 use KushyApi\Http\Requests\UpdateShops;
 use KushyApi\Http\Resources\Shops as ShopsResource;
 use KushyApi\Http\Resources\ShopsCollection;
+use KushyApi\Categories;
 use KushyApi\Inventory;
 use KushyApi\Posts;
 use KushyApi\Services\AddHoursPostMeta;
@@ -24,7 +25,7 @@ class ShopsController extends Controller
 
     public function __construct(AddPostMeta $AddPostMeta, AddPostCategories $AddPostCategories, CreatePostSlug $CreatePostSlug) 
     {
-        $this->middleware('auth:api', ['except' => ['index', 'show', 'menu']]);
+        $this->middleware('auth:api', ['except' => ['index', 'show', 'menu', 'category']]);
         $this->AddPostMeta = $AddPostMeta;
         $this->AddPostCategories = $AddPostCategories;
         $this->CreatePostSlug = $CreatePostSlug;
@@ -284,5 +285,27 @@ class ShopsController extends Controller
                 ->json(['status' => "Couldn't delete that shop"])
                 ->setStatusCode(400);
         }
+    }
+
+    public function category($category)
+    {
+        $config = Config::get('api');
+
+        $categoryId = Categories::whereSlug($category)->firstOrFail()->id;
+
+        // $shops = Posts::with('categories.relationships')
+        //             ->whereSection('shop')
+        //             ->paginate($config['query']['pagination']);
+
+        $shops = Posts::whereHas('categories', function ($query) use ($categoryId) {
+            $query->where('category_id', '=', $categoryId);
+        })    
+        ->with('categories')
+        ->paginate($config['query']['pagination']);
+
+        return (new ShopsCollection($shops))
+            ->response()
+            ->setStatusCode(200);
+
     }
 }

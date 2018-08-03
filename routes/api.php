@@ -104,9 +104,10 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('products', 'ProductsController');
 
     // Shops
-    Route::apiResource('shops', 'ShopsController');
+    Route::get('shops/category/{category}', 'ShopsController@category');
     Route::get('shops/location/{lat}/{lng}', 'ShopsController@location');
     Route::post('shops/media', 'ShopsController@storeMedia');
+    Route::apiResource('shops', 'ShopsController');
 
     // Strains
     Route::apiResource('strains', 'StrainsController');
@@ -143,7 +144,10 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('inventory', 'InventoryController');
     Route::get('inventory/menu/{slug}', 'InventoryController@menu');
     
+    Route::apiResource('manifestos/items', 'ShippingItemsController');
     Route::apiResource('manifestos', 'ShippingManifestosController');
+
+    Route::apiResource('permissions', 'UsersPermissionsController');
 
     /*
     |----------------------------------------------------------------------
