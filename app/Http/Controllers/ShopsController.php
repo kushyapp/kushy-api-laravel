@@ -188,7 +188,7 @@ class ShopsController extends Controller
      */
     public function show($id)
     {
-        $shop = Posts::findOrFail($id);
+        $shop = Posts::with('categories')->findOrFail($id);
 
         return (new ShopsResource($shop))
             ->response()
