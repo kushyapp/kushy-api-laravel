@@ -10,6 +10,7 @@
 
 * Products collection: `optional()` helper was not working. Swapped with `$this->when($value > 0, function () { return 'value' })`.
 * Reviews endpoint: Added `/post/` method to non-auth middleware exception.
+* Photos endpoint: Added `/post/` method to non-auth middleware exception.
 
 
 # 2.8.5 (August 3, 2018)
