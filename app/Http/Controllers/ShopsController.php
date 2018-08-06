@@ -19,9 +19,39 @@ use KushyApi\Services\AddPostMeta;
 use KushyApi\Services\CreatePostSlug;
 use KushyApi\Services\DeletePost;
 use KushyApi\Services\UploadPostMedia;
+use KushyApi\Traits\PostsCategory;
 
 class ShopsController extends Controller
 {
+    use PostsCategory;
+
+    /**
+     * Section name to be displayed when deleting items
+     *
+     * @var string
+     */
+    protected $section = 'shop';
+
+    /**
+     * Config facade
+     *
+     * @var Illuminate\Support\Facades\Config
+     */
+    protected $config = Config::class;
+
+    /**
+     * The primary model used for querying this endpoint
+     *
+     * @var KushyApi\Posts
+     */
+    protected $model = Posts::class;
+
+    /**
+     * The resource collection to display an array of model data
+     *
+     * @var KushyApi\Http\Resources\ShopsCollection
+     */
+    protected $resourceCollection = ShopsCollection::class;
 
     public function __construct(AddPostMeta $AddPostMeta, AddPostCategories $AddPostCategories, CreatePostSlug $CreatePostSlug) 
     {
@@ -63,7 +93,7 @@ class ShopsController extends Controller
          * filtering, sorting, and includes
          */
 
-        $shops = QueryBuilder::for(Posts::class)
+        $shops = QueryBuilder::for($this->model)
             ->whereSection('shop')
             ->allowedFilters([
                 'name', 
@@ -86,7 +116,7 @@ class ShopsController extends Controller
             ])
             ->paginate($config['query']['pagination']);
 
-        return (new ShopsCollection($shops))
+        return (new $this->resourceCollection($shops))
             ->response()
             ->setStatusCode(201);
 
@@ -103,7 +133,7 @@ class ShopsController extends Controller
 
         $shops = Posts::location($lat, $lng, null, 50, 3);
 
-        return new ShopsCollection($shops);
+        return $this->resourceCollection($shops);
     }
 
     /**
@@ -171,7 +201,7 @@ class ShopsController extends Controller
      */
     public function storeMedia(UploadPostMedia $UploadPostMedia, $id) 
     {
-        $shop = Posts::find($id);
+        $shop = $this->model::find($id);
 
         $UploadPostMedia->upload($request, $shop, 'shops');
         
@@ -188,7 +218,7 @@ class ShopsController extends Controller
      */
     public function show($id)
     {
-        $shop = Posts::with('categories')->findOrFail($id);
+        $shop = $this->model::with('categories')->findOrFail($id);
 
         return (new ShopsResource($shop))
             ->response()
@@ -215,7 +245,7 @@ class ShopsController extends Controller
      */
     public function update(UpdateShops $request, AddHoursPostMeta $AddHoursPostMeta, $id)
     {
-        $shop = Posts::find($id);
+        $shop = $this->model::find($id);
         $validated = $request->validated();
 
         // Generate a slug and hardcode the section
@@ -273,7 +303,7 @@ class ShopsController extends Controller
      */
     public function destroy($id)
     {
-        $deletedShop = Posts::destroy($id);
+        $deletedShop = $this->model::destroy($id);
 
         if($deletedShop)
         {
@@ -285,27 +315,5 @@ class ShopsController extends Controller
                 ->json(['status' => "Couldn't delete that shop"])
                 ->setStatusCode(400);
         }
-    }
-
-    public function category($category)
-    {
-        $config = Config::get('api');
-
-        $categoryId = Categories::whereSlug($category)->firstOrFail()->id;
-
-        // $shops = Posts::with('categories.relationships')
-        //             ->whereSection('shop')
-        //             ->paginate($config['query']['pagination']);
-
-        $shops = Posts::whereHas('categories', function ($query) use ($categoryId) {
-            $query->where('category_id', '=', $categoryId);
-        })    
-        ->with('categories')
-        ->paginate($config['query']['pagination']);
-
-        return (new ShopsCollection($shops))
-            ->response()
-            ->setStatusCode(200);
-
     }
 }

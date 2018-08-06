@@ -133,6 +133,20 @@ class Posts extends Model
     }
 
 
+    /**
+     * Search posts categories relationship by category ID
+     * Finds posts by category
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $id
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeCategory($query, $id)
+    {
+        return $query->whereHas('categories', function ($query) use ($id) {
+            $query->where('category_id', '=', $id);
+        });
+    }
 
 
     /**

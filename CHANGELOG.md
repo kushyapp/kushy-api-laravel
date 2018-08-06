@@ -1,3 +1,17 @@
+# 2.8.5 (August 6, 2018)
+
+## Major Changes
+
+* POSTS MODEL: New scope added that searches by category id (`Posts::category($categoryId)->get()`)
+* TRAIT: Created a new trait for API controllers that use the Posts model that creates a `category($categorySlug)` endpoint. Searches the Posts model (via the PostsCategories model) using the category scope.
+* Added category trait to shops, brands, products, and strains API controllers.
+
+## Bug fixes
+
+* Products collection: `optional()` helper was not working. Swapped with `$this->when($value > 0, function () { return 'value' })`.
+* Reviews endpoint: Added `/post/` method to non-auth middleware exception.
+
+
 # 2.8.5 (August 3, 2018)
 
 ## New endpoint

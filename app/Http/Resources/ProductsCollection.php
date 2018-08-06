@@ -21,7 +21,9 @@ class ProductsCollection extends ResourceCollection
                     'name' => $post->name,
                     'slug' => $post->slug,
                     'categories' => $post->categories,
-                    'brand' => optional($post->brand[0])->parent->name,
+                    'brand' => $this->when($post->brand && count($post->brand) > 0, function () use ($post) {
+                        return $post->brand[0]->parent->name;
+                    }),
                     'avatar' => $post->getAvatar,
                     'featured_img' => $post->getFeaturedImage,
                     'rating' => $post->rating,

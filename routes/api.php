@@ -98,9 +98,11 @@ Route::prefix('v1')->group(function () {
     */
 
     // Brands
+    Route::get('brands/category/{category}', 'BrandsController@category');
     Route::apiResource('brands', 'BrandsController');
 
     // Products
+    Route::get('products/category/{category}', 'ProductsController@category');
     Route::apiResource('products', 'ProductsController');
 
     // Shops
@@ -110,6 +112,7 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('shops', 'ShopsController');
 
     // Strains
+    Route::get('strains/category/{category}', 'StrainsController@category');
     Route::apiResource('strains', 'StrainsController');
 
     /*

@@ -16,13 +16,43 @@ use KushyApi\Services\AddPostMeta;
 use KushyApi\Services\CreatePostSlug;
 use KushyApi\Services\UploadPostMedia;
 use KushyApi\Services\DeletePost;
+use KushyApi\Traits\PostsCategory;
 
 class ProductsController extends Controller
 {
+    use PostsCategory;
+
+    /**
+     * Section name to be displayed when deleting items
+     *
+     * @var string
+     */
+    protected $section = 'product';
+
+    /**
+     * Config facade
+     *
+     * @var Illuminate\Support\Facades\Config
+     */
+    protected $config = Config::class;
+
+    /**
+     * The primary model used for querying this endpoint
+     *
+     * @var KushyApi\Posts
+     */
+    protected $model = Posts::class;
+
+    /**
+     * The resource collection to display an array of model data
+     *
+     * @var KushyApi\Http\Resources\ProductsCollection
+     */
+    protected $resourceCollection = ProductsCollection::class;
 
     public function __construct(AddPostMeta $AddPostMeta, AddPostCategories $AddPostCategories, CreatePostSlug $CreatePostSlug, UploadPostMedia $UploadPostMedia) 
     {
-        $this->middleware('auth:api', ['except' => ['index', 'show']]);
+        $this->middleware('auth:api', ['except' => ['index', 'show', 'category']]);
         $this->AddPostMeta = $AddPostMeta;
         $this->AddPostCategories = $AddPostCategories;
         $this->CreatePostSlug = $CreatePostSlug;
