@@ -29,12 +29,12 @@ class StoreBrands extends FormRequest
             'newAvatar'     => 'nullable|image|mimes:jpeg,bmp,png|max:420',
             'category'      => 'required',
             'meta.email'    => 'email_address',
-            'latitude'      => 'integer',
-            'longitude'     => 'integer',
+            'latitude'      => 'numeric',
+            'longitude'     => 'numeric',
             'address'       => 'string|max:255',
             'city'          => 'string|max:255',
             'state'         => 'string|max:255',
-            'postal_code'   => 'integer|max:10',
+            'postal_code'   => 'string',
             'country'       => 'string|max:255',
         ];
     }
