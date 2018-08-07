@@ -16,6 +16,7 @@ class StrainsCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->transform(function($post){
+                $relations = $post->getRelations();
                 return [
                     'id' => $post->id,
                     'name' => $post->name,
@@ -26,6 +27,8 @@ class StrainsCollection extends ResourceCollection
                     'rating' => $post->rating,
                     'featured' => $post->featured,
                     'verified' => $post->verified,
+                    
+                    'includes' => $relations,
                 ];
             }),
             'links' => [

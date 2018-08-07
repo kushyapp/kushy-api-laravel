@@ -16,10 +16,12 @@ class BookmarksCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->transform(function($post){
+                $relations = $post->getRelations();
                 return [
                     'id' => $post->id,
                     'name' => $post->post_id,
                     'slug' => $post->user_id,
+                    'includes' => $relations,
                 ];
             }),
             'links' => [

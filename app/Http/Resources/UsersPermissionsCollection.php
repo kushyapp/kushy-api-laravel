@@ -26,6 +26,7 @@ class UsersPermissionsCollection extends ResourceCollection
                     'permissions' => $post->permissions,
                     'created_at' => $post->created_at,
                     'updated_at' => $post->updated_at,
+                    
                     'includes' => $relations,
                 ];
             }),
