@@ -40,4 +40,26 @@ class BookmarksControllerTest extends CrudTest
      */
     protected $store = [
     ];
+
+    protected $collectionStructure = [
+        'data' => [
+            [
+                'id',
+                'name',
+                'slug',
+                'includes',
+            ],
+        ],
+        'links' => [
+            'self'
+        ]
+    ];
+
+    protected $resourceStructure = [
+        'data' => [
+            'id',
+            'name',
+            'slug',
+        ],
+    ];
 }

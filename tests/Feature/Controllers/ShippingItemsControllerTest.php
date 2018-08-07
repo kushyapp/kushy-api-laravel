@@ -40,4 +40,44 @@ class ShippingItemsControllerTest extends CrudTest
      */
     protected $store = [
     ];
+
+    protected $collectionStructure = [
+        'data' => [
+            [
+                'id',
+                'manifesto_id',
+                'product_id',
+                'uid_tag',
+                'qty_ordered',
+                'qty_received',
+                'unit_cost',
+                'total_cost',
+                'unit_retail_price',
+                'total_retail_price',
+                'rejected',
+                'description',
+                'includes',
+            ],
+        ],
+        'links' => [
+            'self'
+        ]
+    ];
+
+    protected $resourceStructure = [
+        'data' => [
+            'id',
+            'manifesto_id',
+            'product_id',
+            'uid_tag',
+            'qty_ordered',
+            'qty_received',
+            'unit_cost',
+            'total_cost',
+            'unit_retail_price',
+            'total_retail_price',
+            'rejected',
+            'description',
+        ],
+    ];
 }

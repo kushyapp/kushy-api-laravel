@@ -40,4 +40,122 @@ class ShippingManifestosControllerTest extends CrudTest
      */
     protected $store = [
     ];
+
+    protected $collectionStructure = [
+        'data' => [
+            [
+                'id',
+
+                'shipper' => [
+                    'id',
+                    'state_license',
+                    'name',
+                    'address',
+                    'city',
+                    'state',
+                    'postal_code',
+                    'phone',
+
+                ],
+                'receiver' => [
+                    'id',
+                    'state_license',
+                    'name',
+                    'address',
+                    'city',
+                    'state',
+                    'postal_code',
+                    'phone',
+                    'email',
+
+                ],
+                'distributor' => [
+                    'id',
+                    'state_license',
+                    'name',
+                    'address',
+                    'city',
+                    'state',
+                    'postal_code',
+                    'phone',
+                    'email',
+                ],
+
+                'delivery_id',
+                'owner_id',
+                'invoice',
+                'status',
+                'description',
+                'contact_name',
+                'phone',
+                'date_departure',
+                'date_estimated_arrival',
+                'date_actual_arrival',
+                'date_signed',
+                'digital_signature',
+
+                'access_token',
+                'includes',
+            ],
+        ],
+        'links' => [
+            'self'
+        ]
+    ];
+
+    protected $resourceStructure = [
+        'data' => [
+            'id',
+
+            'shipper' => [
+                'id',
+                'state_license',
+                'name',
+                'address',
+                'city',
+                'state',
+                'postal_code',
+                'phone',
+
+            ],
+            'receiver' => [
+                'id',
+                'state_license',
+                'name',
+                'address',
+                'city',
+                'state',
+                'postal_code',
+                'phone',
+                'email',
+
+            ],
+            'distributor' => [
+                'id',
+                'state_license',
+                'name',
+                'address',
+                'city',
+                'state',
+                'postal_code',
+                'phone',
+                'email',
+            ],
+
+            'delivery_id',
+            'owner_id',
+            'invoice',
+            'status',
+            'description',
+            'contact_name',
+            'phone',
+            'date_departure',
+            'date_estimated_arrival',
+            'date_actual_arrival',
+            'date_signed',
+            'digital_signature',
+
+            'access_token',
+        ],
+    ];
 }

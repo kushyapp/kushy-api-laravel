@@ -40,4 +40,37 @@ class UsersPermissionsControllerTest extends CrudTest
      */
     protected $store = [
     ];
+
+    protected $collectionStructure = [
+        'data' => [
+            [
+                'id',
+                'business_id',
+                'user_id',
+                'verified',
+                'user_type',
+                'permissions',
+                'created_at',
+                'updated_at',
+                
+                'includes',
+            ],
+        ],
+        'links' => [
+            'self'
+        ]
+    ];
+
+    protected $resourceStructure = [
+        'data' => [
+            'id',
+            'business_id',
+            'user_id',
+            'verified',
+            'user_type',
+            'permissions',
+            'created_at',
+            'updated_at',
+        ],
+    ];
 }

@@ -41,4 +41,37 @@ class StrainsControllerTest extends CrudTest
     protected $store = [
         'category' => '1'
     ];
+
+    protected $collectionStructure = [
+        'data' => [
+            [
+                'id',
+                'name',
+                'slug',
+                'categories',
+                'avatar',
+                'featured_img',
+                'rating',
+                'featured',
+                'includes',
+            ],
+        ],
+        'links' => [
+            'self'
+        ]
+    ];
+
+    protected $resourceStructure = [
+        'data' => [
+            'id',
+            'name',
+            'slug',
+            'categories',
+            'avatar',
+            'featured_img',
+            'description',
+            'rating',
+            'featured',
+        ],
+    ];
 }
