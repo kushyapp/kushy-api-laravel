@@ -14,6 +14,15 @@ class UsersPermissions extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'business_id' => $this->business_id,
+            'user_id' => $this->user_id,
+            'verified' => $this->verified,
+            'user_type' => $this->user_type,
+            'permissions' => $this->permissions,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
+        ];
     }
 }
