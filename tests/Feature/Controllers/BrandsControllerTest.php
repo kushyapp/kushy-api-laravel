@@ -41,4 +41,58 @@ class BrandsControllerTest extends CrudTest
     protected $store = [
         'category' => 1
     ];
+
+    protected $collectionStructure = [
+        'data' => [
+            [
+                'id',
+                'name',
+                'slug',
+                'categories',
+                'avatar',
+                'featured_img',
+                'rating',
+                'featured',
+                'verified',
+                'location' => [
+                    'latitude',
+                    'longitude',
+                    'address',
+                    'state',
+                    'city',
+                    'postal_code',
+                    'country',
+                ],
+                'includes',
+            ],
+        ],
+        'links' => [
+            'self'
+        ]
+    ];
+
+    protected $resourceStructure = [
+        'data' => [
+            'id',
+            'name',
+            'slug',
+            'categories',
+            'avatar',
+            'featured_img',
+            'description',
+            'rating',
+            'featured',
+            'verified',
+            'location' => [
+                'latitude',
+                'longitude',
+                'address',
+                'state',
+                'city',
+                'postal_code',
+                'country',
+            ],
+            'social',
+        ],
+    ];
 }
