@@ -18,6 +18,8 @@ class ShippingManifestosCollection extends ResourceCollection
             'data' => $this->collection->transform(function($post){
                 $relations = $post->getRelations();
                 return [
+                    'id' => $post->id,
+                    
                     'shipper' => [
                         'id' => $post->shipper_id,
                         'state_license' => $post->shipper_state_license,

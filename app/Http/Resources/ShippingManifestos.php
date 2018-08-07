@@ -15,6 +15,8 @@ class ShippingManifestos extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
+            
             'shipper' => [
                 'id' => $this->shipper_id,
                 'state_license' => $this->shipper_state_license,
