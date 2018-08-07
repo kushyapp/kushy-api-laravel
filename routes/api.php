@@ -158,6 +158,7 @@ Route::prefix('v1')->group(function () {
     |----------------------------------------------------------------------
     */
     // Orders
+    Route::apiResource('carts/items', 'CartItemsController');
     Route::apiResource('carts', 'CartsController');
     
     // Orders
