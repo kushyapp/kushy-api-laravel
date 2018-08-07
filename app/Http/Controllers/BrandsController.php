@@ -137,7 +137,7 @@ class BrandsController extends Controller
         $newBrand = Posts::create($validated);
 
         // Upload featured image and avatar - then attach to post
-        $this->UploadPostMedia->upload($request, $brand, 'brands');
+        $this->UploadPostMedia->upload($request, $newBrand, 'brands');
 
         /**
          * Handle the categories
@@ -180,7 +180,9 @@ class BrandsController extends Controller
     {
         $brand = Posts::find($id);
 
-        return new BrandsResource($brand);
+        return (new BrandsResource($brand))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
