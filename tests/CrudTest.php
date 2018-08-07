@@ -33,12 +33,7 @@ abstract class CrudTest extends TestCase
 
         $response
             ->assertStatus(201)
-            ->assertJson([
-                'data' => true,
-                "links" => [
-                    "self" => "link-value"
-                ]
-            ]);
+            ->assertJsonStructure($this->collectionStructure);
     }
 
     /**
@@ -60,9 +55,7 @@ abstract class CrudTest extends TestCase
 
         $response
             ->assertStatus(201)
-            ->assertJson([
-                'data' => true
-            ]);
+            ->assertJsonStructure($this->resourceStructure);
     }
 
     /**
@@ -88,9 +81,7 @@ abstract class CrudTest extends TestCase
 
         $response
             ->assertStatus(201)
-            ->assertJson([
-                'data' => true
-            ]);
+            ->assertJsonStructure($this->resourceStructure);
     }
     
     /**
