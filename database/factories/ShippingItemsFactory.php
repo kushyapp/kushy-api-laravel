@@ -2,7 +2,6 @@
 
 use Faker\Generator as Faker;
 use KushyApi\Posts;
-use KushyApi\ShippingManifesto;
 
 $factory->define(KushyApi\ShippingItems::class, function (Faker $faker) {
     $qty_ordered = $faker->numberBetween(1, 10);
@@ -12,8 +11,7 @@ $factory->define(KushyApi\ShippingItems::class, function (Faker $faker) {
 
     return [
         'id' => $faker->uuid,
-
-        'manifesto_id' => ShippingManifesto::all()->random()->id,
+        'manifesto_id' => factory(KushyApi\ShippingManifesto::class)->create()->id,
         'uid_tag' => $faker->uuid,
         'qty_ordered' => (int) $qty_ordered,
         'qty_received' => (int) $qty_received,

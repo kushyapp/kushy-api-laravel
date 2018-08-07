@@ -1,7 +1,6 @@
 <?php
 
 use Faker\Generator as Faker;
-use KushyApi\DeliveryDrivers;
 use KushyApi\Posts;
 use KushyApi\User;
 
@@ -39,7 +38,7 @@ $factory->define(KushyApi\ShippingManifesto::class, function (Faker $faker) {
         'distributor_phone' => $faker->phoneNumber,
         'distributor_email' => $faker->email,
         
-        'delivery_id' => DeliveryDrivers::all()->random()->id,
+        'delivery_id' => factory(KushyApi\DeliveryDrivers::class)->create()->id,
         
         'owner_id' => User::all()->random()->id,
 
