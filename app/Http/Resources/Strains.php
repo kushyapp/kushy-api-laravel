@@ -24,7 +24,6 @@ class Strains extends JsonResource
             'description' => $this->description,
             'rating' => $this->rating,
             'featured' => $this->featured,
-            'social' => $this->social,
         ];
     }
 }
