@@ -9,6 +9,7 @@ use KushyApi\Http\Controllers\Controller;
 use KushyApi\Http\Requests\StoreInventory;
 use KushyApi\Http\Resources\Inventory as InventoryResource;
 use KushyApi\Http\Resources\InventoryCollection;
+use KushyApi\Helpers\NiceTime;
 use KushyApi\Inventory;
 use KushyApi\Posts;
 
@@ -17,7 +18,7 @@ class InventoryController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['index', 'show']]);
+        $this->middleware('auth:api', ['except' => ['index', 'show', 'menu']]);
     }
 
     /**
@@ -126,7 +127,7 @@ class InventoryController extends Controller
                             ->where('business_id', $shop->id)
                             ->orderBy('updated_at', 'desc')
                             ->first();
-        $menuLastUpdated ? $menuLastUpdated = nicetime($menuLastUpdated->updated_at) : $menuLastUpdated = '420 years ago';
+        $menuLastUpdated ? $menuLastUpdated = NiceTime::create($menuLastUpdated->updated_at) : $menuLastUpdated = '420 years ago';
         $request->request->add(['menuLastUpdated' => $menuLastUpdated]);
 
         return (new InventoryCollection($inventory))
