@@ -40,7 +40,7 @@ class Carts extends Model
      */
     public function user()
     {   
-        return $this->belongsTo('KushyApi\Users', 'user_id', 'id');
+        return $this->belongsTo('KushyApi\User', 'user_id', 'id');
     }
     
     /**
