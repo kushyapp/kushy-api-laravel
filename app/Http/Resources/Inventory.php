@@ -15,14 +15,16 @@ class Inventory extends JsonResource
     public function toArray($request)
     {
         return [
-            'inventory_id' => $this->id,
-            'product_id' => $this->product->id,
-            'name' => $this->product->name,
-            'slug' => $this->product->slug,
-            'categories' => $this->product->categories,
-            'avatar' => $this->product->getAvatar,
-            'featured_img' => $this->product->getFeaturedImage,
-            'description' => $this->product->description,
+            'id' => $this->id,
+            'product' => [
+                'id' => $this->product->id,
+                'name' => $this->product->name,
+                'slug' => $this->product->slug,
+                'categories' => $this->product->categories,
+                'avatar' => $this->product->getAvatar,
+                'featured_img' => $this->product->getFeaturedImage,
+                'description' => $this->product->description,
+            ],
             'pricing' => [
                 'pricing_type' => $this->pricing_type,
                 'list_price' => $this->list_price,

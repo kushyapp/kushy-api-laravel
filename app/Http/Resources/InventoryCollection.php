@@ -22,18 +22,20 @@ class InventoryCollection extends ResourceCollection
             'data' => $this->collection->transform(function($post){
                 return [
 
-                    'inventory_id' => $post->id,
-                    'product_id' => $post->product->id,
-                    'name' => $post->product->name,
-                    'slug' => $post->product->slug,
-                    // Use the transform() method on the PostCategories collection
-                    // to only return the category name (instead of extra fields)
-                    'categories' => $post->product->categories->transform(function($category) {
-                                        return $category->categoryName;
-                                    }),
-                    'avatar' => $post->product->getAvatr,
-                    'featured_img' => $post->product->getFeaturedImage,
-                    'description' => $post->product->description,
+                    'id' => $post->id,
+                    'product' => [
+                        'id' => $post->product->id,
+                        'name' => $post->product->name,
+                        'slug' => $post->product->slug,
+                        // Use the transform() method on the PostCategories collection
+                        // to only return the category name (instead of extra fields)
+                        'categories' => $post->product->load('categories')->categories->transform(function($category) {
+                            return $category->categoryName;
+                        }),
+                        'avatar' => $post->product->getAvatar,
+                        'featured_img' => $post->product->getFeaturedImage,
+                        'description' => $post->product->description,
+                    ],
                     'pricing' => [
                         'pricing_type' => $post->pricing_type,
                         'list_price' => $post->list_price,
