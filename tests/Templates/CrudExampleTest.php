@@ -40,4 +40,33 @@ class CrudExampleTest extends CrudTest
      */
     protected $store = [
     ];
+
+    /**
+     * The structure of the JSON response from collections
+     * Tests assert the response against this array
+     *
+     * @var array
+     */
+    protected $collectionStructure = [
+        'data' => [
+            [
+                'id',
+            ],
+        ],
+        'links' => [
+            'self'
+        ]
+    ];
+
+    /**
+     * The structure of the JSON response from a single resource
+     * Tests assert the response against this array
+     *
+     * @var array
+     */
+    protected $resourceStructure = [
+        'data' => [
+            'id',
+        ],
+    ];
 }
