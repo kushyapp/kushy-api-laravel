@@ -11,7 +11,7 @@
 1. Copy the `.env.example` in the project root to `.env`.
 1. Change MYSQL_HOST to `mysql`. Add AWS S3 credentials (or CDN images won't display).
 1. Start the server: `cd laradock && docker-compose up -d nginx mysql redis elasticsearch`
-1. Add the DB tables and seed them: `docker-compose exec workspace php artisan migrate && docker-compose exec workspace db:seed`
+1. Add the DB tables and seed them: `docker-compose exec workspace php artisan migrate && docker-compose exec workspace php artisan db:seed`
 1. Install Laravel Passport (required for fresh installs / migrations): `php artisan passport:install`
 
 You're good to go!
