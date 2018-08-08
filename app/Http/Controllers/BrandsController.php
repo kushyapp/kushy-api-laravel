@@ -52,7 +52,7 @@ class BrandsController extends Controller
 
     public function __construct(AddPostMeta $AddPostMeta, AddPostCategories $AddPostCategories, CreatePostSlug $CreatePostSlug, UploadPostMedia $UploadPostMedia) 
     {
-        $this->middleware('auth:api', ['except' => ['index', 'show', 'category']]);
+        $this->middleware('auth:api', ['except' => ['index', 'show', 'category', 'slug']]);
         $this->AddPostMeta = $AddPostMeta;
         $this->AddPostCategories = $AddPostCategories;
         $this->CreatePostSlug = $CreatePostSlug;
@@ -178,7 +178,25 @@ class BrandsController extends Controller
      */
     public function show($id)
     {
-        $brand = Posts::find($id);
+        $brand = Posts::with('categories')->findOrFail($id);
+
+        return (new BrandsResource($brand))
+            ->response()
+            ->setStatusCode(201);
+    }
+
+    /**
+     * Display the specified resource by slug
+     *
+     * @param  string  $slug
+     * @return \Illuminate\Http\Response
+     */
+    public function slug($slug)
+    {
+        $brand = Posts::with('categories')
+            ->whereSection('brand')
+            ->whereSlug($slug)
+            ->firstOrFail();
 
         return (new BrandsResource($brand))
             ->response()

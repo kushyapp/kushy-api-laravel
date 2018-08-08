@@ -52,7 +52,7 @@ class ProductsController extends Controller
 
     public function __construct(AddPostMeta $AddPostMeta, AddPostCategories $AddPostCategories, CreatePostSlug $CreatePostSlug, UploadPostMedia $UploadPostMedia) 
     {
-        $this->middleware('auth:api', ['except' => ['index', 'show', 'category']]);
+        $this->middleware('auth:api', ['except' => ['index', 'show', 'category', 'slug']]);
         $this->AddPostMeta = $AddPostMeta;
         $this->AddPostCategories = $AddPostCategories;
         $this->CreatePostSlug = $CreatePostSlug;
@@ -184,7 +184,27 @@ class ProductsController extends Controller
     {
         $product = Posts::find($id);
 
-        return new ProductsResource($product);
+        return (new ProductsResource($product))
+            ->response()
+            ->setStatusCode(201);
+    }
+
+    /**
+     * Display the specified resource by slug
+     *
+     * @param  string  $slug
+     * @return \Illuminate\Http\Response
+     */
+    public function slug($slug)
+    {
+        $product = Posts::with('categories')
+            ->whereSection('product')
+            ->whereSlug($slug)
+            ->firstOrFail();
+
+        return (new ProductsResource($product))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
