@@ -106,6 +106,7 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('products', 'ProductsController');
 
     // Shops
+    Route::get('shops/slug/{slug}', 'ShopsController@slug');
     Route::get('shops/category/{category}', 'ShopsController@category');
     Route::get('shops/location/{lat}/{lng}', 'ShopsController@location');
     Route::post('shops/media', 'ShopsController@storeMedia');

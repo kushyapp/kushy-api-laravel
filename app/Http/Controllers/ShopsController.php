@@ -55,7 +55,7 @@ class ShopsController extends Controller
 
     public function __construct(AddPostMeta $AddPostMeta, AddPostCategories $AddPostCategories, CreatePostSlug $CreatePostSlug) 
     {
-        $this->middleware('auth:api', ['except' => ['index', 'show', 'menu', 'category']]);
+        $this->middleware('auth:api', ['except' => ['index', 'show', 'menu', 'category', 'slug']]);
         $this->AddPostMeta = $AddPostMeta;
         $this->AddPostCategories = $AddPostCategories;
         $this->CreatePostSlug = $CreatePostSlug;
@@ -219,6 +219,21 @@ class ShopsController extends Controller
     public function show($id)
     {
         $shop = $this->model::with('categories')->findOrFail($id);
+
+        return (new ShopsResource($shop))
+            ->response()
+            ->setStatusCode(201);
+    }
+
+    /**
+     * Display the specified resource by slug
+     *
+     * @param  string  $slug
+     * @return \Illuminate\Http\Response
+     */
+    public function slug($slug)
+    {
+        $shop = $this->model::with('categories')->whereSlug($slug)->firstOrFail();
 
         return (new ShopsResource($shop))
             ->response()
