@@ -13,51 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-
-    $user = $request->user();
-
-    if ($user->tokenCan('access-email')) {
-        $user->makeVisible('email');
-    }
-
-    if ($user->tokenCan('access-patient-status')) {
-        $user->makeVisible('verified');
-    }
-
-
-    if ($user->tokenCan('access-user-account')) {
-        $user->makeVisible('email'); 
-        $user->makeVisible('type');
-        $user->makeVisible('verified');
-        $user->makeVisible('drivers_license');
-        $user->makeVisible('doctors_rec');
-        $user->makeVisible('address');
-        $user->makeVisible('city');
-        $user->makeVisible('state');
-        $user->makeVisible('postal_code');
-        $user->makeVisible('country');
-        $user->makeVisible('billing_first_name');
-        $user->makeVisible('billing_last_name');
-        $user->makeVisible('billing_address');
-        $user->makeVisible('billing_city');
-        $user->makeVisible('billing_country');
-        $user->makeVisible('billing_state');
-        $user->makeVisible('billing_postal_code');
-        $user->makeVisible('billing_phone');
-
-        $user->makeVisible('shipping_first_name');
-        $user->makeVisible('shipping_last_name');
-        $user->makeVisible('shipping_address');
-        $user->makeVisible('shipping_city');
-        $user->makeVisible('shipping_country');
-        $user->makeVisible('shipping_state');
-        $user->makeVisible('shipping_postal_code');
-        $user->makeVisible('shipping_phone');
-    }
-
-    return $user;
-});
 
 // Developer Portal
 Route::get('/', 'DeveloperController@index');
@@ -69,6 +24,54 @@ Route::get('/', 'DeveloperController@index');
 */
 
 Route::prefix('v1')->group(function () {
+
+
+    Route::middleware('auth:api')->get('/user', function (Request $request) {
+
+        $user = $request->user();
+
+        if ($user->tokenCan('access-email')) {
+            $user->makeVisible('email');
+        }
+
+        if ($user->tokenCan('access-patient-status')) {
+            $user->makeVisible('verified');
+        }
+
+
+        if ($user->tokenCan('access-user-account')) {
+            $user->makeVisible('email'); 
+            $user->makeVisible('type');
+            $user->makeVisible('verified');
+            $user->makeVisible('drivers_license');
+            $user->makeVisible('doctors_rec');
+            $user->makeVisible('address');
+            $user->makeVisible('city');
+            $user->makeVisible('state');
+            $user->makeVisible('postal_code');
+            $user->makeVisible('country');
+            $user->makeVisible('billing_first_name');
+            $user->makeVisible('billing_last_name');
+            $user->makeVisible('billing_address');
+            $user->makeVisible('billing_city');
+            $user->makeVisible('billing_country');
+            $user->makeVisible('billing_state');
+            $user->makeVisible('billing_postal_code');
+            $user->makeVisible('billing_phone');
+
+            $user->makeVisible('shipping_first_name');
+            $user->makeVisible('shipping_last_name');
+            $user->makeVisible('shipping_address');
+            $user->makeVisible('shipping_city');
+            $user->makeVisible('shipping_country');
+            $user->makeVisible('shipping_state');
+            $user->makeVisible('shipping_postal_code');
+            $user->makeVisible('shipping_phone');
+        }
+
+        return $user;
+    });
+    
     /*
     |----------------------------------------------------------------------
     | Search
@@ -98,10 +101,12 @@ Route::prefix('v1')->group(function () {
     */
 
     // Brands
+    Route::get('brands/slug/{slug}', 'BrandsController@slug');
     Route::get('brands/category/{category}', 'BrandsController@category');
     Route::apiResource('brands', 'BrandsController');
 
     // Products
+    Route::get('products/slug/{slug}', 'ProductsController@slug');
     Route::get('products/category/{category}', 'ProductsController@category');
     Route::apiResource('products', 'ProductsController');
 
@@ -113,6 +118,7 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('shops', 'ShopsController');
 
     // Strains
+    Route::get('strains/slug/{slug}', 'StrainsController@slug');
     Route::get('strains/category/{category}', 'StrainsController@category');
     Route::apiResource('strains', 'StrainsController');
 
