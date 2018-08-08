@@ -1,3 +1,36 @@
+# 2.9.0 (August 7, 2018)
+
+## Breaking Change
+
+* Crud tests now assert JSON structure. update tests
+
+## Documentation
+
+* git commit emojis 🎉
+* New Passport fresh install instructions
+
+## :sparkle: New Feature
+
+* /cart/items/ endpoint added + testing
+
+## :rotating_light: Testing
+
+* Added more JSON assertion
+* Brands controller test using Crud base
+* Brands test updated with JSON structure
+* All CRUD tests updated to JSON structure assertion
+
+## :bug: Bug fixes
+
+* Removed social from Strains (no need)
+* Added relations to Bookmarks + Strains endpoints
+* Added ID to Manifestos response
+* Dupe username faker error fix using random num
+* Swapped from query to factory create for relations
+* Ref'd wrong $var when adding new brand
+* tests failed due cause these weren't filled out
+* Lat/lng should be numeric not integer
+
 # 2.8.5 (August 6, 2018)
 
 ## Major Changes
