@@ -233,7 +233,10 @@ class ShopsController extends Controller
      */
     public function slug($slug)
     {
-        $shop = $this->model::with('categories')->whereSlug($slug)->firstOrFail();
+        $shop = $this->model::with('categories')
+            ->whereSection('shop')
+            ->whereSlug($slug)
+            ->firstOrFail();
 
         return (new ShopsResource($shop))
             ->response()
