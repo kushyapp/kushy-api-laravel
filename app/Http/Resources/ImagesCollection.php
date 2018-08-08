@@ -16,6 +16,7 @@ class ImagesCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->transform(function($image){
+                $relations = $post->getRelations();
                 return [
                     'id' => $image->id,
                     'image' => $image->getImage,
@@ -24,7 +25,9 @@ class ImagesCollection extends ResourceCollection
                     'post_id' => $image->post_id,
                     'featured' => $image->featured,
                     'created_at' => $image->created_at,
-                    'updated_at' => $image->updated_at
+                    'updated_at' => $image->updated_at,
+                    
+                    'includes' => $relations,
                 ];
             }),
             'links' => [
