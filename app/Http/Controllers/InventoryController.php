@@ -35,6 +35,7 @@ class InventoryController extends Controller
          */
 
         $inventory = QueryBuilder::for(Inventory::class)
+            ->with('product.categories')
             ->allowedFilters([
                 'product_id', 
                 'business_id', 
