@@ -16,10 +16,15 @@ class Carts extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => $this->user,
-            'shop' => $this->shop,
+            'user' => $this->user_id,
+            'shop' => $this->shop_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+
+            'includes' => [
+                'user' => $this->load('user')->user,
+                'shop' => $this->load('shop')->shop,
+            ]
         ];
     }
 }

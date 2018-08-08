@@ -16,12 +16,15 @@ class CartsCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->transform(function($post){
+                $relations = $post->getRelations();
                 return [
                     'id' => $post->id,
-                    'user' => $post->user,
-                    'shop' => $post->shop,
+                    'user' => $post->user_id,
+                    'shop' => $post->shop_id,
                     'created_at' => $post->created_at,
                     'updated_at' => $post->updated_at,
+
+                    'includes' => $relations
                 ];
             }),
             'links' => [
