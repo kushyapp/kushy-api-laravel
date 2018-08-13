@@ -25,13 +25,10 @@ class Reviews extends Model
      * @var array
      */
     protected $fillable = [
+        'user_id', 
         'post_id', 
-        'user_id',
         'review',
         'rating',
-        'useful',
-        'dank',
-        'funny',
     ];
 
 

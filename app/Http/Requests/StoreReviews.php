@@ -13,6 +13,8 @@ class StoreReviews extends ErrorValidatorBase
      */
     public function authorize()
     {
+        // @todo: check if post ID is valid
+        
         return $this->user();
     }
 
@@ -25,12 +27,8 @@ class StoreReviews extends ErrorValidatorBase
     {
         return [
             'post_id'          => 'string|max:255',
-            'user_id'          => 'string|max:255',
             'review'   => 'string',
             'rating'     => 'integer|max:5',
-            'useful'     => 'integer',
-            'dank'     => 'integer',
-            'funny'     => 'integer',
         ];
     }
 }

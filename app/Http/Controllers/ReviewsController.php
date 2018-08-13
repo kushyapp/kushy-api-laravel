@@ -60,7 +60,10 @@ class ReviewsController extends Controller
      */
     public function store(StoreReviews $request)
     {
-        $review = Reviews::create($request->validated());
+        $validated = $request->validated();
+        $validated['user_id'] = $request->user()->id;
+
+        $review = Reviews::create($validated);
 
         return (new ReviewsResource($review))
             ->response()
