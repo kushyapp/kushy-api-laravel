@@ -87,6 +87,32 @@ class ActivityController extends Controller
             ->setStatusCode(201);
     }
 
+    public function user(Request $request)
+    {
+        /**
+         * We use Spatie's Query Builder package to handle
+         * filtering, sorting, and includes
+         */
+        $activity = QueryBuilder::for(UserActivity::class)
+            ->whereStatus(true)
+            ->whereIn('section', ['bookmarks', 'reviews', 'useful'])
+            ->where('section', '<>', 'useful')
+            ->where('user_id', $request->user()->id)
+            ->allowedFilters([
+                'section',
+                'item_id'
+            ])
+            ->allowedIncludes([
+                'bookmarks', 
+                'reviews', 
+            ])
+            ->paginate($config['query']['pagination']);
+
+        return (new UserActivityCollection($activity))
+            ->response()
+            ->setStatusCode(201);
+    }
+
     /**
      * Update the specified resource in storage.
      *
