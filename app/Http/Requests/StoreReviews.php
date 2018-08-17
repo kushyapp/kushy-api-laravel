@@ -27,7 +27,7 @@ class StoreReviews extends ErrorValidatorBase
     {
         return [
             'post_id'          => 'string|max:255',
-            'review'   => 'string',
+            'review'   => 'required|min:15|max:1000',
             'rating'     => 'integer|max:5',
         ];
     }
