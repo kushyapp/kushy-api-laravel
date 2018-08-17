@@ -17,7 +17,7 @@ class UserActivity extends JsonResource
         return [
             'id' => $this->id,
             'section' => $this->section,
-            'user' => $this->user,
+            'user_id' => $this->user_id,
             'item_id' => $this->item_id,
         ];
     }
