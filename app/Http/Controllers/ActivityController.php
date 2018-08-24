@@ -45,7 +45,8 @@ class ActivityController extends Controller
             ->allowedIncludes([
                 'user', 
                 'bookmarks', 
-                'reviews', 
+                'reviews',
+                'post', 
             ])
             ->paginate($config['query']['pagination']);
 
@@ -103,8 +104,8 @@ class ActivityController extends Controller
                 'item_id'
             ])
             ->allowedIncludes([
-                'bookmarks', 
-                'reviews', 
+                'bookmarks.post', 
+                'reviews.post', 
             ])
             ->paginate($config['query']['pagination']);
 
