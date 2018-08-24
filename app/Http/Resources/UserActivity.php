@@ -18,7 +18,7 @@ class UserActivity extends JsonResource
             'id' => $this->id,
             'section' => $this->section,
             'user_id' => $this->user_id,
-            'item_id' => $this->item_id,
+            'post_id' => $this->post_id,
         ];
     }
 }

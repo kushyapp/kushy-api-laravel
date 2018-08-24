@@ -29,7 +29,7 @@ class UserActivity extends Model
     protected $fillable = [
         'user_id', 
         'section', 
-        'item_id',
+        'post_id',
     ];
 
     /**
@@ -40,11 +40,11 @@ class UserActivity extends Model
     protected $rules = [
         'user_id'          => 'string|required',
         'section'          => 'string|required',
-        'item_id'          => 'string|required',
+        'post_id'          => 'string|required',
     ];
 
     /**
-     * Get the user that owns the review.
+     * Get the user that owns the activity.
      */
     public function user()
     {
@@ -52,7 +52,15 @@ class UserActivity extends Model
     }
 
     /**
-     * Get the user that owns the review.
+     * Get the post that referenced in activity.
+     */
+    public function post()
+    {
+        return $this->belongsTo('KushyApi\Posts', 'post_id');
+    }
+
+    /**
+     * Get the bookmark referenced in activity.
      */
     public function bookmarks()
     {
@@ -60,7 +68,7 @@ class UserActivity extends Model
     }
 
     /**
-     * Get the user that owns the review.
+     * Get the review referenced in activity.
      */
     public function reviews()
     {
