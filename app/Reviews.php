@@ -56,4 +56,12 @@ class Reviews extends Model
         return $this->hasMany('KushyApi\ReviewsStrains', 'review_id');
     }
 
+    /**
+     * Get the user activity that associated with the review.
+     */
+    public function activity()
+    {
+        return $this->hasMany('KushyApi\UserActivity', 'post_id');
+    }
+
 }

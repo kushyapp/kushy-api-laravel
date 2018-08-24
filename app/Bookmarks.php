@@ -41,4 +41,12 @@ class Bookmarks extends Model
     {
         return $this->belongsTo('KushyApi\Posts');
     }
+
+    /**
+     * Get the user activity that associated with the bookmark.
+     */
+    public function activity()
+    {
+        return $this->hasMany('KushyApi\UserActivity', 'post_id');
+    }
 }
