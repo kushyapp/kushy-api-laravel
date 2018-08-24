@@ -95,24 +95,66 @@ class ReviewsController extends Controller
     {
         $config = Config::get('api');
 
-        $reviews = Reviews::with('user')->wherePostId($id)->paginate($config['query']['pagination']);
+        $reviews = Reviews::with('user')
+            ->wherePostId($id)
+            ->paginate($config['query']['pagination']);
 
-        return new ReviewsCollection($reviews);
+        return (new ReviewsCollection($reviews))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
-     * Display reviews for specific user
+     * Display reviews for the logged in user
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function user(Request $request)
+    {
+        $config = Config::get('api');
+
+        /**
+         * We use Spatie's Query Builder package to handle
+         * filtering, sorting, and includes
+         */
+
+        $reviews = QueryBuilder::for(Reviews::class)
+            ->whereUserId($request->user()->id)
+            ->allowedFilters([
+                'post_id', 
+                'rating', 
+                'review'
+            ])
+            ->allowedIncludes([
+                'user', 
+                'post', 
+                'strainMeta'
+            ])
+            ->paginate($config['query']['pagination']);
+
+        return (new ReviewsCollection($reviews))
+            ->response()
+            ->setStatusCode(201);
+    }
+
+    /**
+     * Display reviews for specific user by ID
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function user($id)
+    public function byUser($id)
     {
         $config = Config::get('api');
 
-        $reviews = Reviews::with('post')->wherePostId($id)->paginate($config['query']['pagination']);
+        $reviews = Reviews::with('post')
+            ->whereUserId($id)
+            ->paginate($config['query']['pagination']);
 
-        return new ReviewsCollection($reviews);
+        return (new ReviewsCollection($reviews))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**

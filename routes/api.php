@@ -141,9 +141,10 @@ Route::prefix('v1')->group(function () {
     Route::get('photos/user/{id}', 'PhotosController@user');
 
     // Reviews
-    Route::apiResource('reviews', 'ReviewsController');
     Route::get('reviews/post/{id}', 'ReviewsController@post');
-    Route::get('reviews/user/{id}', 'ReviewsController@user');
+    Route::get('reviews/user/', 'ReviewsController@user');
+    Route::get('reviews/user/{id}', 'ReviewsController@byUser');
+    Route::apiResource('reviews', 'ReviewsController');
 
     /*
     |----------------------------------------------------------------------
