@@ -99,7 +99,10 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        $user->fill($request->validated());
+        // Array_filter removes any empty values
+        // like password, which may sneak through validation
+        $user->fill(array_filter($request->validated()));
+        $user->save();
 
         return (new UsersResource($user))
             ->response()
