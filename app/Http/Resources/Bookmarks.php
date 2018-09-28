@@ -16,8 +16,8 @@ class Bookmarks extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->post_id,
-            'slug' => $this->user_id,
+            'post_id' => $this->post_id,
+            'user_id' => $this->user_id,
         ];
     }
 }

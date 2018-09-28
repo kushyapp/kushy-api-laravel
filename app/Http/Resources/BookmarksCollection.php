@@ -19,8 +19,8 @@ class BookmarksCollection extends ResourceCollection
                 $relations = $post->getRelations();
                 return [
                     'id' => $post->id,
-                    'name' => $post->post_id,
-                    'slug' => $post->user_id,
+                    'post_id' => $post->post_id,
+                    'user_id' => $post->user_id,
                     'includes' => $relations,
                 ];
             }),
