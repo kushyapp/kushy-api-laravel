@@ -11,7 +11,6 @@ abstract class ApiController extends Controller
     public function __construct() 
     {
         $this->middleware('auth:api', ['except' => ['index', 'show']]);
-        $this->middleware('admin', ['except' => ['index', 'show']]);
     }
 
     /**
