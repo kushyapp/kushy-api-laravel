@@ -16,6 +16,7 @@ class AddUserActivity implements ShouldQueue
     private $user_id;
     private $section;
     private $item_id;
+    private $post_id;
     
     /**
      * Create a new job instance.
@@ -26,11 +27,12 @@ class AddUserActivity implements ShouldQueue
      * 
      * @return void
      */
-    public function __construct($user_id, $section, $item_id)
+    public function __construct($user_id, $section, $item_id, $post_id)
     {
         $this->user_id = $user_id;
         $this->section = $section;
         $this->item_id = $item_id;
+        $this->post_id = $post_id;
     }
 
     /**
@@ -45,6 +47,7 @@ class AddUserActivity implements ShouldQueue
             'user_id' => $this->user_id,
             'section' => $this->section,
             'item_id' => $this->item_id,
+            'post_id' => $this->post_id,
         ]);
 
         return $newActivity;
