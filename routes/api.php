@@ -83,6 +83,7 @@ Route::prefix('v1')->group(function () {
     */
 
     // Bookmarks
+    Route::get('bookmarks/user/', 'BookmarksController@user');
     Route::apiResource('bookmarks', 'BookmarksController');
     
     // Deals
