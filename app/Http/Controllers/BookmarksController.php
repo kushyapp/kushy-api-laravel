@@ -3,12 +3,14 @@
 namespace KushyApi\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\QueryBuilder;
 use KushyApi\Http\Controllers\Controller;
 use KushyApi\Http\Requests\StoreBookmarks;
 use KushyApi\Http\Requests\DeleteBookmark;
 use KushyApi\Http\Resources\Bookmarks as BookmarksResource;
 use KushyApi\Http\Resources\BookmarksCollection;
+use KushyApi\Jobs\AddUserActivity;
 use KushyApi\Bookmarks;
 
 class BookmarksController extends Controller
@@ -30,7 +32,7 @@ class BookmarksController extends Controller
          * We use Spatie's Query Builder package to handle
          * filtering, sorting, and includes
          */
-        $categories = QueryBuilder::for(Bookmarks::class)
+        $bookmarks = QueryBuilder::for(Bookmarks::class)
             ->allowedFilters([
                 'post_id',
                 'user_id'
@@ -42,7 +44,7 @@ class BookmarksController extends Controller
             ])
             ->get();
 
-        return (new BookmarksCollection($categories))
+        return (new BookmarksCollection($bookmarks))
             ->response()
             ->setStatusCode(201);
     }
@@ -56,9 +58,16 @@ class BookmarksController extends Controller
      */
     public function store(StoreBookmarks $request)
     {
-        $category = Bookmarks::create($request->all());
+        $bookmarks = Bookmarks::create($request->all());
 
-        return (new BookmarksResource($category))
+        // Create User Activity
+        try {
+            AddUserActivity::dispatch($request->user()->id, 'bookmarks', $bookmarks->id, $bookmarks->post_id);
+        } catch (Exception $e) {
+            Log::error($e);
+        }
+
+        return (new BookmarksResource($bookmarks))
             ->response()
             ->setStatusCode(201);
     }
@@ -71,9 +80,9 @@ class BookmarksController extends Controller
      */
     public function show($id)
     {
-        $categories = Bookmarks::findOrFail($id);
+        $bookmarks = Bookmarks::findOrFail($id);
 
-        return (new BookmarksResource($categories))
+        return (new BookmarksResource($bookmarks))
             ->response()
             ->setStatusCode(201);
     }
@@ -111,5 +120,29 @@ class BookmarksController extends Controller
             'code' => true,
             'response' => "Successfully deleted the bookmark."
         ]);
+    }
+
+    public function user(Request $request) 
+    {
+        $userId = $request->user()->id;
+
+        /**
+         * We use Spatie's Query Builder package to handle
+         * filtering, sorting, and includes
+         */
+        $bookmarks = QueryBuilder::for(Bookmarks::class)
+            ->whereUserId($userId)
+            ->allowedFilters([
+                'post_id'
+            ])
+            ->allowedIncludes([
+                'post',
+                'activity'
+            ])
+            ->get();
+
+        return (new BookmarksCollection($bookmarks))
+            ->response()
+            ->setStatusCode(201);
     }
 }
