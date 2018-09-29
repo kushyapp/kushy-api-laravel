@@ -6,6 +6,7 @@ use KushyApi\UserActivity;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
@@ -43,12 +44,16 @@ class AddUserActivity implements ShouldQueue
     public function handle()
     {
         /** Add new activity via the model */
-        $newActivity = UserActivity::create([
-            'user_id' => $this->user_id,
-            'section' => $this->section,
-            'item_id' => $this->item_id,
-            'post_id' => $this->post_id,
-        ]);
+        try {
+            $newActivity = UserActivity::create([
+                'user_id' => $this->user_id,
+                'section' => $this->section,
+                'item_id' => $this->item_id,
+                'post_id' => $this->post_id,
+            ]);
+        } catch (Exception $e) {
+            Log::error($e);
+        }
 
         return $newActivity;
 
