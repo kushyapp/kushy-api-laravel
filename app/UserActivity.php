@@ -30,6 +30,7 @@ class UserActivity extends Model
         'user_id', 
         'section', 
         'post_id',
+        'item_id',
     ];
 
     /**
