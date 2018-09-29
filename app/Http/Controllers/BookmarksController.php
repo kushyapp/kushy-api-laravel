@@ -3,7 +3,6 @@
 namespace KushyApi\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\QueryBuilder;
 use KushyApi\Http\Controllers\Controller;
 use KushyApi\Http\Requests\StoreBookmarks;
@@ -61,11 +60,7 @@ class BookmarksController extends Controller
         $bookmarks = Bookmarks::create($request->all());
 
         // Create User Activity
-        try {
-            AddUserActivity::dispatch($request->user()->id, 'bookmarks', $bookmarks->id, $bookmarks->post_id);
-        } catch (Exception $e) {
-            Log::error($e);
-        }
+        AddUserActivity::dispatch($request->user()->id, 'bookmarks', $bookmarks->id, $bookmarks->post_id);
 
         return (new BookmarksResource($bookmarks))
             ->response()
