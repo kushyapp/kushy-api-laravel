@@ -39,5 +39,69 @@ class CategoriesControllerTest extends CrudTest
      * @var array
      */
     protected $store = [
+    ]; 
+
+    /**
+     * The structure of the JSON response from collections
+     * Tests assert the response against this array
+     *
+     * @var array
+     */
+    protected $collectionStructure = [
+        'data' => [
+            [
+                'id',
+                'name',
+                'slug',
+                'section',
+                'includes',
+            ],
+        ],
+        'links' => [
+            'self'
+        ]
     ];
+
+    /**
+     * The structure of the JSON response from a single resource
+     * Tests assert the response against this array
+     *
+     * @var array
+     */
+    protected $resourceStructure = [
+        'data' => [
+            'id',
+            'name',
+            'slug',
+            'section',
+        ],
+    ];
+
+
+    /**
+     * POST /endpoint/
+     *
+     * @return void
+     */
+    public function testStore()
+    {
+        $activity = $this->createPost();
+        $activity = $activity->toArray();
+
+        /**
+         * Pass in any extra data
+         */
+        if($this->store)
+        {
+            $activity = array_merge($activity, $this->store);
+        }
+
+        $response = $this->json('POST', "api/v1/{$this->endpoint}/", $activity);
+        ($this->model)::destroy($activity['id']);
+        dd($response);
+
+        $response
+            ->assertStatus(201)
+            ->assertJsonStructure($this->resourceStructure);
+    }
 }
