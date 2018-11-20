@@ -7,7 +7,7 @@ $DB_DATABASE = env('DB_DATABASE', 'forge');
 $DB_USERNAME = env('DB_USERNAME', 'forge');
 $DB_PASSWORD = env('DB_PASSWORD', '');
 
-if(env('APP_ENV') == 'heroku')
+if(env('APP_ENV', 'local') == 'heroku')
 {
     $DATABASE_URL = parse_url(getenv("DATABASE_URL"));
 
