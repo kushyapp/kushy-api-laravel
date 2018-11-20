@@ -612,11 +612,14 @@ Add a code snippet to a page:
 1. Set app environment to Heroku: `heroku config:set APP_ENV=heroku`
 1. Set app key: `heroku config:set APP_KEY=$(php artisan --no-ansi key:generate --show)`
 1. Set the DB connection to pgsql (rather than MySQL): `heroku config:set DB_CONNECTION=pgsql`
+1. Set config for AWS S3: `heroku config:set AWS_ACCESS_KEY_ID=YOUR_KEY AWS_SECRET_ACCESS_KEY=YOUR_KEY AWS_DEFAULT_REGION=us-east-1 AWS_BUCKET=kushy-frontend-assets`
 1. Optionally/recommended - Turn on debug mode `heroku config:set APP_DEBUG=true`
 1. Push git commits to Heroku: `git push heroku develop:master`
 1. Run migrations to structure DB: `heroku run php artisan migrate`
 1. Optionally - Seed database: `heroku run php artisan db:seed`
 1. Check Heroku app for changes: `heroku open`
+
+> Heroku's free tier for PostgresDB is 1000 entries. Our fully seeded database is much larger than that limit, so it's recommended you run the Posts50TableSeeder class (`heroku run php artisan db:seed --class=Posts50TableSeeder`)
 
 ### AWS
 
