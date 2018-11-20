@@ -1,21 +1,21 @@
 <?php
 
 
-$DB_HOST = env('DB_HOST', '127.0.0.1'),
-$DB_PORT = env('DB_PORT', '3306'),
-$DB_DATABASE = env('DB_DATABASE', 'forge'),
-$DB_USERNAME = env('DB_USERNAME', 'forge'),
-$DB_PASSWORD = env('DB_PASSWORD', ''),
+$DB_HOST = env('DB_HOST', '127.0.0.1');
+$DB_PORT = env('DB_PORT', '3306');
+$DB_DATABASE = env('DB_DATABASE', 'forge');
+$DB_USERNAME = env('DB_USERNAME', 'forge');
+$DB_PASSWORD = env('DB_PASSWORD', '');
 
 if(env('APP_ENV') == 'heroku')
 {
     $DATABASE_URL = parse_url(getenv("DATABASE_URL"));
 
-    $DB_HOST = $DATABASE_URL["host"],
-    $DB_PORT = $DATABASE_URL["port"],
-    $DB_DATABASE = ltrim($DATABASE_URL["path"], "/"),
-    $DB_USERNAME = $DATABASE_URL["user"],
-    $DB_PASSWORD = $DATABASE_URL["pass"],
+    $DB_HOST = $DATABASE_URL["host"];
+    $DB_PORT = $DATABASE_URL["port"];
+    $DB_DATABASE = ltrim($DATABASE_URL["path"], "/");
+    $DB_USERNAME = $DATABASE_URL["user"];
+    $DB_PASSWORD = $DATABASE_URL["pass"];
 }
 
 return [
