@@ -607,10 +607,16 @@ Add a code snippet to a page:
 
 ### Heroku
 
-1. Swap `.env` file with data from `production.env`
-2. Push git commits to Heroku
-3. [Check website for changes](http://kushy-frontend-laravel.herokuapp.com/)
-4. Swap back `.env` file with data from `development.env`
+1. Run `heroku create` to make an app.
+1. Add a Postgres DB to app (uses free Hobby plan): `heroku addons:create heroku-postgresql:hobby-dev`
+1. Set app environment to Heroku: `heroku config:set APP_ENV=heroku`
+1. Set app key: `heroku config:set APP_KEY=$(php artisan --no-ansi key:generate --show)`
+1. Set the DB connection to pgsql (rather than MySQL): `heroku config:set DB_CONNECTION=pgsql`
+1. Optionally/recommended - Turn on debug mode `heroku config:set APP_DEBUG=true`
+1. Push git commits to Heroku: `git push heroku develop:master`
+1. Run migrations to structure DB: `heroku run php artisan migrate`
+1. Optionally - Seed database: `heroku run php artisan db:seed`
+1. Check Heroku app for changes: `heroku open`
 
 ### AWS
 
