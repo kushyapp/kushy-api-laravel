@@ -165,7 +165,7 @@ class Posts extends Model
                 Session::put("avatar_".$this->id, $this->cache['avatar']);
                 return $this->cache['avatar']; 
             } else {
-                if (app()->env == 'local') {
+                if (app()->env == 'local' || app()->env == 'heroku') {
                     return $this->cache['avatar'] = url('/') . '/assets/Icons/avatar-default-leaf.jpg';
                 }
                 return $this->cache['avatar'] = Storage::disk('s3')->url('assets/Icons/avatar-default-leaf.jpg');
@@ -190,7 +190,7 @@ class Posts extends Model
                 Session::put("featured_img_".$this->id, $this->cache['featured_img']);
                 return $this->cache['featured_img']; 
             } else {
-                if (app()->env == 'local') {
+                if (app()->env == 'local' || app()->env == 'heroku') {
                     return $this->cache['featured_img'] = url('/') . '/assets/Icons/avatar-default-leaf.jpg';
                 }
                 return $this->cache['featured_img'] = Storage::disk('s3')->url('assets/Icons/avatar-default-leaf.jpg');
