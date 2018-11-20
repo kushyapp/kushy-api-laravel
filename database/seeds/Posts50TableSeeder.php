@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class PostsTableSeeder extends Seeder
+class Posts50TableSeeder extends Seeder
 {
 
     /**
