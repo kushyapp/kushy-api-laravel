@@ -22,6 +22,8 @@ class UserActivityCollection extends ResourceCollection
                     'section' => $post->section,
                     'user_id' => $post->user_id,
                     'post_id' => $post->post_id,
+                    'created_at' => $post->created_at,
+                    'updated_at' => $post->updated_at,
                     'includes' => $relations,
                 ];
             }),
