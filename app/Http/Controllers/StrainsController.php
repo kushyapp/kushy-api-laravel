@@ -53,7 +53,7 @@ class StrainsController extends Controller
 
     public function __construct(AddPostMeta $AddPostMeta, AddPostCategories $AddPostCategories, CreatePostSlug $CreatePostSlug, UploadPostMedia $UploadPostMedia) 
     {
-        $this->middleware('auth:api', ['except' => ['index', 'show', 'category', 'slug']]);
+        $this->middleware('auth:api', ['except' => ['index', 'show', 'products', 'category', 'slug']]);
         $this->AddPostMeta = $AddPostMeta;
         $this->AddPostCategories = $AddPostCategories;
         $this->CreatePostSlug = $CreatePostSlug;
@@ -187,6 +187,21 @@ class StrainsController extends Controller
     }
 
     /**
+     * Display products containing specified strain
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function products($id)
+    {
+        $strain = Posts::find($id)->children()->get();
+
+        return response()
+            ->json($strain)
+            ->setStatusCode(201);
+    }
+
+    /**
      * Display the specified resource by slug
      *
      * @param  string  $slug
@@ -195,7 +210,7 @@ class StrainsController extends Controller
     public function slug($slug)
     {
         $strain = Posts::with('categories')
-            ->where('strain')
+            ->whereSection('strain')
             ->whereSlug($slug)
             ->firstOrFail();
 

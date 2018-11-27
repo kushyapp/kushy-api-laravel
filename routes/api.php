@@ -71,6 +71,7 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('shops', 'ShopsController');
 
     // Strains
+    Route::get('strains/products/{id}', 'StrainsController@products');
     Route::get('strains/slug/{slug}', 'StrainsController@slug');
     Route::get('strains/category/{category}', 'StrainsController@category');
     Route::apiResource('strains', 'StrainsController');
