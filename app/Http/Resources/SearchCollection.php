@@ -16,12 +16,12 @@ class SearchCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->transform(function($post){
+                $relations = $post->getRelations();
                 return [
                     'id' => $post->id,
                     'name' => $post->name,
                     'section' => $post->section,
                     'slug' => $post->slug,
-                    'categories' => $post->categories,
                     'avatar' => $post->getAvatar,
                     'featured_img' => $post->getFeaturedImage,
                     'rating' => $post->rating,
@@ -36,6 +36,8 @@ class SearchCollection extends ResourceCollection
                         'postal_code' => $post->postal_code,
                         'country' => $post->country,
                     ],
+                    
+                    'includes' => $relations,
                 ];
             }),
             'links' => [
